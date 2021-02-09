@@ -3,17 +3,19 @@ library(shiny)
 library(maps)
 library(sf)
 library(spData)
+library(lubridate)
 
 debt_stock <- read.csv("debt_stock_china.csv") %>% 
   select(-country_code, -ISO)
 
+
 worlde <- world %>% 
   rename(country = name_long)
+  
 
 mapamundi <- left_join(worlde, debt_stock, by = "country")
 
 
-### shiny app
 
 ui <- fluidPage(
   fluidRow(
@@ -28,7 +30,7 @@ ui <- fluidPage(
            align = "center",
            sliderInput(inputId = "date", 
                            label = "Date:", 
-                           min = 2000, 
+                           min = 2000 , 
                            max = 2017, 
                            value = 2000)
              ),
@@ -50,12 +52,12 @@ server <- function(input, output) {
   
   output$map <- renderPlot({
     ggplot() +
-      geom_sf(data = data(), aes(fill = china_debt_gdp)) +
+      geom_sf(data = world) +
+      geom_sf(data = data(), aes(fill = china_debt_gdp), alpha = 3/5) +
       labs(title = "", 
            fill = "",
            caption = "Source: sonnet") +
       theme_minimal() +
-      scale_fill_viridis_c() +
       theme(axis.text.x = element_blank(), 
             axis.text.y = element_blank(),
             plot.caption = element_text(size = 12)) +
