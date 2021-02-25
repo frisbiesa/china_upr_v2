@@ -81,7 +81,7 @@ server <- function(input, output) {
             alpha = 3/5) +
     labs(title = "", 
          fill = "",
-         caption = 'Source: "China’s Overseas Lending," NBER, Sebastian Horn, Carmen M. Reinhart & Christoph Trebesch') + 
+         caption = 'Source: "China's Overseas Lending," NBER, Sebastian Horn, Carmen M. Reinhart & Christoph Trebesch') + 
     scale_fill_viridis_c(option = "magma", limits = scale()) +
     theme_minimal() +
     theme(axis.text.x = element_blank(), 
