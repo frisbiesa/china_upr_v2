@@ -121,7 +121,8 @@ c_f %>%
 health <- c_f %>% 
   filter(crs_sector_name == "Health")
 
-library(tidyverse)
+
+## distance
 
 distance <- read.csv("distance_to_china.csv") %>% 
   rename(country = 1)
@@ -141,4 +142,51 @@ distance$mileage <- as.numeric(distance$mileage)
 distance <- distance %>% 
   select(country, distance)
 
-write.csv(distance, "distance_china.csv")
+### trade data
+
+comtrade <- rbind(read.csv("comtrade_2018.csv"), read.csv("comtrade_2013.csv"))
+
+comtrade_china_total <- comtrade %>% 
+  select(Year, Trade.Flow, Partner, Partner.ISO, Trade.Value..US..) %>% 
+  rename(year = Year, trade_flow = Trade.Flow, partner = Partner, ISO = Partner.ISO, total_usd = Trade.Value..US..)
+
+
+debt <- read.csv("debt_stock_china.csv")
+
+c2 <- debt %>% 
+  select(ISO, year, china_debt_gdp) %>% 
+  right_join(comtrade_china_total, by = c("year", "ISO"))
+
+
+c2 %>% 
+  filter(trade_flow == "Import" & china_debt_gdp < 50) %>% 
+  ggplot() +
+  geom_point(aes(china_debt_gdp, log(total_usd)), stat = "identity") +
+  geom_smooth(aes(china_debt_gdp, log(total_usd)))
+
+
+ave <- c2 %>%
+  group_by(ISO) %>%
+  arrange(year) %>%
+  mutate(diff_year = year - lag(year),  
+         diff_growth = total_usd - lag(total_usd), 
+         growth_rate = (diff_growth / diff_year)/lag(total_usd) * 100)
+
+
+ave %>%
+  filter(trade_flow == "Export") %>% 
+  ggplot() +
+  geom_point(aes(china_debt_gdp, growth_rate), stat = "identity") +
+  theme(legend.position = "none")
+
+
+c_pd <- c_pd %>% 
+  rename(country = 1) %>% 
+  select(country, total_elite_visits) %>% 
+  left_join(c2, by = c("country" = "partner"))
+
+c_pd %>%
+  filter(trade_flow == "Import") %>% 
+  ggplot() +
+  geom_point(aes(log(total_usd), total_elite_visits), stat = "identity") +
+  theme(legend.position = "none")
