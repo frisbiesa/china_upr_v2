@@ -190,3 +190,7 @@ c_pd %>%
   ggplot() +
   geom_point(aes(log(total_usd), total_elite_visits), stat = "identity") +
   theme(legend.position = "none")
+
+
+
+
