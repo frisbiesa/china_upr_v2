@@ -4,7 +4,7 @@ library(gghighlight)
 library(rvest)
 library(utils)
 library(readxl)
-
+library(countrycode)
 
 projects <- read.csv("projects.csv")
 ## check were this came from
@@ -191,6 +191,24 @@ c_pd %>%
   geom_point(aes(log(total_usd), total_elite_visits), stat = "identity") +
   theme(legend.position = "none")
 
+un_scores <- read.csv("joint_support_scores.csv") %>% 
+  select(country, diff_support_score) %>% 
+  left_join(comtrade_china_total, by = c("country" = "partner"))
 
+un_scores %>% 
+  filter(year <= 2018 & year >= 2013) %>% 
+  filter(trade_flow == "Export") %>% 
+  ggplot() +
+  geom_point(aes(log(total_usd), total_elite_visits), stat = "identity") +
+  theme(legend.position = "none")
+
+
+un_scores$continent <- countrycode(sourcevar = un_scores$country,
+                            origin = "country.name",
+                            destination = "continent")
+
+debt$continent <- countrycode(sourcevar = debt$country,
+                              origin = "country.name",
+                              destination = "continent")
 
 
