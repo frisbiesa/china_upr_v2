@@ -5,38 +5,6 @@ library(rvest)
 library(utils)
 library(readxl)
 library(countrycode)
-
-projects <- read.csv("projects.csv")
-## check were this came from
-
-projects %>% 
-  group_by(ad_sector_names) %>% 
-  summarise(commited_aid = sum(total_commitments, na.rm = "TRUE")) %>% 
-  ggplot() +
-  geom_bar(aes(commited_aid, fct_reorder(ad_sector_names, commited_aid)), stat = "identity") +
-  theme_minimal() +
-  labs(x = "", y = "")
-
-projects %>% 
-  group_by(transactions_start_year) %>% 
-  summarize(commited_aid = sum(total_commitments, na.rm = "TRUE")) %>% 
-  ggplot() +
-  geom_bar(aes(transactions_start_year, commited_aid), stat = "identity") +
-  scale_x_continuous(breaks = 2000:2014)
-
-projects %>% 
-  group_by(recipients, transactions_start_year) %>% 
-  summarize(commited_aid = sum(total_commitments, na.rm = "TRUE")) %>%
-  ggplot() +
-  geom_line(aes(transactions_start_year, commited_aid, color = recipients), stat = "identity") +
-  scale_x_continuous(breaks = 2000:2014) +
-  theme(legend.position = 'none') + 
-  gghighlight(max(commited_aid) > .5e+10,
-            unhighlighted_params = list(size = 0.75))
-
-
-
-library(tidyverse)
 library(gapminder)
 
 c_f <- read.csv("chinese_finance.csv")
@@ -146,12 +114,18 @@ distance <- distance %>%
 
 comtrade <- rbind(read.csv("comtrade_2018.csv"), read.csv("comtrade_2013.csv"))
 
+
 comtrade_china_total <- comtrade %>% 
   select(Year, Trade.Flow, Partner, Partner.ISO, Trade.Value..US..) %>% 
   rename(year = Year, trade_flow = Trade.Flow, partner = Partner, ISO = Partner.ISO, total_usd = Trade.Value..US..)
 
+un_scores <- read.csv("joint_support_scores.csv") %>% 
+  select(country, diff_support_score) %>% 
+  left_join(comtrade_china_total, by = c("country" = "partner"))
 
-debt <- read.csv("debt_stock_china.csv")
+un_scores$continent <- countrycode(sourcevar = un_scores$country,
+                                   origin = "country.name",
+                                   destination = "continent")
 
 c2 <- debt %>% 
   select(ISO, year, china_debt_gdp) %>% 
@@ -173,42 +147,36 @@ ave <- c2 %>%
          growth_rate = (diff_growth / diff_year)/lag(total_usd) * 100)
 
 
-ave %>%
-  filter(trade_flow == "Export") %>% 
-  ggplot() +
-  geom_point(aes(china_debt_gdp, growth_rate), stat = "identity") +
-  theme(legend.position = "none")
 
-
-c_pd <- c_pd %>% 
-  rename(country = 1) %>% 
-  select(country, total_elite_visits) %>% 
-  left_join(c2, by = c("country" = "partner"))
-
-c_pd %>%
-  filter(trade_flow == "Import") %>% 
-  ggplot() +
-  geom_point(aes(log(total_usd), total_elite_visits), stat = "identity") +
-  theme(legend.position = "none")
-
-un_scores <- read.csv("joint_support_scores.csv") %>% 
-  select(country, diff_support_score) %>% 
-  left_join(comtrade_china_total, by = c("country" = "partner"))
-
-un_scores %>% 
-  filter(year <= 2018 & year >= 2013) %>% 
-  filter(trade_flow == "Export") %>% 
-  ggplot() +
-  geom_point(aes(log(total_usd), total_elite_visits), stat = "identity") +
-  theme(legend.position = "none")
-
-
-un_scores$continent <- countrycode(sourcevar = un_scores$country,
-                            origin = "country.name",
-                            destination = "continent")
 
 debt$continent <- countrycode(sourcevar = debt$country,
                               origin = "country.name",
                               destination = "continent")
 
+finance <- read.csv("chinese_finance.csv")
+
+finance$usd_defl_2014 <- str_remove_all(finance$usd_defl_2014, ",")
+finance$usd_defl_2014 <- as.integer(finance$usd_defl_2014)
+
+finance$continent <- countrycode(sourcevar = finance$recipient_condensed,
+                              origin = "country.name",
+                              destination = "continent")
+
+finance_tree <- finance %>% 
+  group_by(continent, crs_sector_name) %>% 
+  summarise(total = sum(usd_defl_2014, na.rm = TRUE))
+
+
+
+
+  ggplotly(ggplot(finance_tree) +
+             geom_bar(aes(total, crs_sector_name, fill = continent), 
+                      stat= "identity", position = "fill") +
+             labs(title = "Chinese development finance per type and continent",
+                  y = "", x = "Total", fill = "Continent") +
+             theme_minimal() +
+             theme(title = element_text(face = "bold"),
+                   legend.position = "bottom"))
+
+    
 
