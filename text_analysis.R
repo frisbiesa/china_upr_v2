@@ -49,9 +49,13 @@ names(sentiment_list) <- c("Comments About China in 2013", "Comments About China
 
 plot <- function(df){
     ggplot(data = sentiment_list[[df]] %>% filter(!is.na(bing))) +
-    geom_histogram(aes(bing), stat = "count") +
+    geom_histogram(aes(bing, fill = bing), stat = "count") +
     scale_x_discrete(guide= guide_axis(angle = 45)) +
-    labs(title = df)
+    labs(title = df) +
+    theme(legend.title = element_blank()) +
+    theme(plot.title = element_text(size = 20, face = "bold"),
+          axis.text=element_text(size=12),
+          axis.title=element_text(size=14,face="bold"))
 }
 
 lapply(names(sentiment_list), plot)
@@ -67,7 +71,6 @@ for (i in names(sentiment_list)) {
 freq_list[[i]] <- count(sentiment_list[[i]], word_tokens, sort = TRUE)
 }
 
-freq_list[[2]]
 
 ##simple bag-of-words approach with lemmas for both documents combined
 
