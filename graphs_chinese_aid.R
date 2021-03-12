@@ -1,11 +1,8 @@
-
 library(tidyverse)
-library(gghighlight)
-library(rvest)
-library(utils)
-library(readxl)
 library(countrycode)
 library(gapminder)
+library(stargazer)
+library(WDI)
 
 c_f <- read.csv("chinese_finance.csv")
 c_pd <- read.csv("chinese_public_diplo.csv")
@@ -15,7 +12,7 @@ debt <- read.csv("debt_stock_china.csv")
 debt$debt_usd <- str_remove_all(debt$debt_usd, ",")
 debt$debt_usd <- as.integer(debt$debt_usd)
 
-## diplomatic visits mean nothing 
+## diplomatic visits means nothing 
 
 visits <- c_pd %>%
   rename(country = 1) %>% 
@@ -26,17 +23,19 @@ ggplot(visits) +
   geom_point(aes(debt_usd, total_elite_visits), stat = "identity")
 
 
-
-## evolution of total chinese finance
+## evolution of total chinese finance per continent
 
 debt %>%
-  group_by(year) %>%
-  summarise(total = sum(debt_usd, na.rm = TRUE)) %>% 
+  group_by(year, continent) %>%
+  summarise(total = sum(debt_usd, na.rm = TRUE)/1000000) %>% 
   ggplot() +
-  geom_line(aes(year, total), stat = "identity") +
-  theme(legend.position = "none")
+  geom_line(aes(year, total, color = continent), stat = "identity") +
+  theme_minimal() +
+  labs(title = "Evolution of chinese finance per continent (2000-2017)",
+       x = "", y = "Millions of USD", color = "Continent")  +
+  theme(title = element_text(face = "bold")) 
 
-## growth rate of total chinese invsetments
+## growth rate of total chinese invsetments - we would have to fix the start
 
 debt %>%
   group_by(year) %>%
@@ -49,48 +48,7 @@ debt %>%
   geom_line(aes(year, growth_rate), stat = "identity") +
   theme(legend.position = "none")
 
-## loan types
-
-c_f %>% 
-  group_by(loan_type) %>% 
-  filter(loan_type != "") %>% 
-  summarise(total = n()) %>% 
-  ggplot() +
-  geom_bar(aes(total, fct_reorder(loan_type, total)), stat = "identity")
-
-
-## number within each type of instrument 
-
-c_f %>% 
-  group_by(flow) %>% 
-  #filter(loan_type != "") %>% 
-  summarise(total = n()) %>% 
-  ggplot() +
-  geom_bar(aes(total, fct_reorder(flow, total)), stat = "identity")
-
-## amount per instrument
-c_f %>% 
-  group_by(flow) %>% 
-  #filter(loan_type != "") %>% 
-  summarise(total = sum(as.integer(str_remove(usd_defl_2014, ",")), na.rm = TRUE)) %>% 
-  ggplot() +
-  geom_bar(aes(total, fct_reorder(flow, total)), stat = "identity")
-
-## sectors
-
-c_f %>% 
-  group_by(crs_sector_name) %>% 
-  #filter(loan_type != "") %>% 
-  summarise(total = sum(as.integer(str_remove(usd_defl_2014, ",")), na.rm = TRUE)) %>% 
-  ggplot() +
-  geom_bar(aes(total, fct_reorder(crs_sector_name, total)), stat = "identity")
-
-
-health <- c_f %>% 
-  filter(crs_sector_name == "Health")
-
-
-## distance
+## distance data for controlling
 
 distance <- read.csv("distance_to_china.csv") %>% 
   rename(country = 1)
@@ -112,46 +70,50 @@ distance <- distance %>%
 
 ### trade data
 
-comtrade <- rbind(read.csv("comtrade_2018.csv"), read.csv("comtrade_2013.csv"))
-
+comtrade <- rbind(read.csv("comtrade_2018.csv"), read.csv("comtrade_2013.csv"), 
+                  read.csv("comtrade_2008.csv"), read.csv("comtrade_2003.csv"))
 
 comtrade_china_total <- comtrade %>% 
   select(Year, Trade.Flow, Partner, Partner.ISO, Trade.Value..US..) %>% 
-  rename(year = Year, trade_flow = Trade.Flow, partner = Partner, ISO = Partner.ISO, total_usd = Trade.Value..US..)
+  rename(year = Year, trade_flow = Trade.Flow, country = Partner, ISO = Partner.ISO, total_usd = Trade.Value..US..) %>%
+  filter(country != "World")
 
-un_scores <- read.csv("joint_support_scores.csv") %>% 
-  select(country, diff_support_score) %>% 
-  left_join(comtrade_china_total, by = c("country" = "partner"))
 
-un_scores$continent <- countrycode(sourcevar = un_scores$country,
-                                   origin = "country.name",
-                                   destination = "continent")
-
-c2 <- debt %>% 
+trade_debt <- debt %>% 
   select(ISO, year, china_debt_gdp) %>% 
   right_join(comtrade_china_total, by = c("year", "ISO"))
 
 
-c2 %>% 
-  filter(trade_flow == "Import" & china_debt_gdp < 50) %>% 
-  ggplot() +
-  geom_point(aes(china_debt_gdp, log(total_usd)), stat = "identity") +
-  geom_smooth(aes(china_debt_gdp, log(total_usd)))
-
-
-ave <- c2 %>%
-  group_by(ISO) %>%
-  arrange(year) %>%
-  mutate(diff_year = year - lag(year),  
-         diff_growth = total_usd - lag(total_usd), 
-         growth_rate = (diff_growth / diff_year)/lag(total_usd) * 100)
-
-
-
-
-debt$continent <- countrycode(sourcevar = debt$country,
+trade_debt$continent <- countrycode(sourcevar = trade_debt$country,
                               origin = "country.name",
                               destination = "continent")
+
+## is there any correlation between debt and trade?
+
+trade_debt %>% 
+  filter(china_debt_gdp < 50) %>% 
+  ggplot() +
+  geom_point(aes(log(total_usd), china_debt_gdp), stat = "identity") +
+  geom_smooth(aes(log(total_usd), china_debt_gdp))
+
+reg <- lm(data = trade_debt, china_debt_gdp ~ total_usd + continent)
+
+stargazer(reg, title = "Results", type = "text")
+
+## its seems that there is no clear correlation
+
+## lets see in Africa
+
+africa <- trade_debt %>% 
+  filter(continent == "Africa")
+
+reg_africa <- lm(data = africa, china_debt_gdp ~ total_usd)
+
+stargazer(reg_africa, title = "Results", type = "text")
+
+## not much
+
+## bar plot with types of finance
 
 finance <- read.csv("chinese_finance.csv")
 
@@ -178,5 +140,46 @@ finance_tree <- finance %>%
              theme(title = element_text(face = "bold"),
                    legend.position = "bottom"))
 
-    
+## sectors through time
+  
+finance %>% 
+  group_by(year, crs_sector_name) %>% 
+  summarise(total = sum(usd_defl_2014, na.rm = TRUE)/1000000) %>%
+  ungroup() %>% 
+  group_by(crs_sector_name) %>% 
+  mutate(totaltotal = sum(total)) %>% 
+  filter(totaltotal > 10000 & crs_sector_name != "Unallocated / Unspecified") %>% 
+  ggplot() +
+  geom_line(aes(year, total, color = crs_sector_name), size = 1, stat = "identity") +
+  theme_minimal() +
+  labs(title = "Evolution of chinese finance per most relevant sector (2000-2017)",
+       x = "", y = "Millions of USD (2014)", color = "Sector")  +
+  theme(title = element_text(face = "bold"))
+
+  
+## does trade or finance correlates with gdp per capita 
+  
+gdp <- WDI(indicator='NY.GDP.PCAP.KD', start=2000, end=2017) %>% 
+  rename(gdp_per_capita = 3) %>% 
+  select(country, gdp_per_capita, year)
+  
+trade_debt_gdp <- left_join(trade_debt, gdp, by = c("country", "year"))
+
+## nothing interesting to show here
+trade_debt_gdp %>% 
+  filter(china_debt_gdp < 60 & gdp_per_capita < 30000) %>% 
+  ggplot() +
+  geom_point(aes(gdp_per_capita, total_usd), stat = "identity") +
+  geom_smooth(aes(gdp_per_capita, total_usd))
+
+## evolution of trade per continent
+
+trade_debt_gdp %>% 
+  group_by(continent, year) %>% 
+  summarise(total = sum(total_usd, na.rm = TRUE)) %>% 
+  ggplot() +
+  geom_line(aes(year, total, color = continent), stat = "identity") +
+  theme_minimal() +
+  labs(title = "Evolution of chinese trade per continent (2000-2017)",
+       x = "", y = "Total in USD", color = "Continent") 
 

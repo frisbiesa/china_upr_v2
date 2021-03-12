@@ -10,7 +10,8 @@ library(lubridate)
 debt_stock <- read.csv("debt_stock_china.csv") %>% 
   select(-country_code, -ISO)
 
-comtrade <- rbind(read.csv("comtrade_2018.csv"), read.csv("comtrade_2013.csv"))
+comtrade <- rbind(read.csv("comtrade_2018.csv"), read.csv("comtrade_2013.csv"), 
+                  read.csv("comtrade_2008.csv"), read.csv("comtrade_2003.csv"))
 
 comtrade_china_total <- comtrade %>% 
   select(Year, Trade.Flow, Partner, Partner.ISO, Trade.Value..US..) %>% 
@@ -29,7 +30,7 @@ ui <- fluidPage(
   fluidRow(
     column(width = 12,
            align = "center",
-           tags$h1("Financial and trade flows with China", 
+           tags$h1("Financial and trade flows with China in the developing world", 
                    tags$style('head { face: bold }'))
     )
   ), 
