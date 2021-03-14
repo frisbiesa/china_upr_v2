@@ -3,6 +3,7 @@ library(countrycode)
 library(gapminder)
 library(stargazer)
 library(WDI)
+library(plotly)
 
 c_f <- read.csv("chinese_finance.csv")
 c_pd <- read.csv("chinese_public_diplo.csv")
@@ -11,6 +12,10 @@ debt <- read.csv("debt_stock_china.csv")
 
 debt$debt_usd <- str_remove_all(debt$debt_usd, ",")
 debt$debt_usd <- as.integer(debt$debt_usd)
+
+debt$continent <- countrycode(sourcevar = debt$country,
+                                 origin = "country.name",
+                                 destination = "continent")
 
 ## diplomatic visits means nothing 
 
@@ -45,28 +50,29 @@ debt %>%
          diff_growth = total - lag(total), 
          growth_rate = (diff_growth / diff_year)/lag(total) * 100) %>% 
   ggplot() +
-  geom_line(aes(year, growth_rate), stat = "identity") +
-  theme(legend.position = "none")
+  geom_line(aes(year, growth_rate), color = "brown", size = 1, stat = "identity") +
+  theme_minimal() +
+  labs(title = "Growth rate of total investments from China", y = "Growth Rate (%)", x = "",
+       caption = "Source: Horn, Sebastian, Carmen M. Reinhart, and Christoph Trebesch. 2019. 'China's Overseas Lending.' NBER Working Paper No. 26050.") +
+  theme(legend.position = "none", 
+        plot.title = element_text(face = "bold", family = "serif", size = 24))
+
 
 ## distance data for controlling
 
-distance <- read.csv("distance_to_china.csv") %>% 
-  rename(country = 1)
+#distance <- read.csv("distance_china.csv") %>% 
+#  rename(country = 1)
 
-distance$country <- str_remove(distance$country, "Distance from ")
-distance$country <- str_remove(distance$country, " to China")
-distance$country <- str_remove(distance$country, "China to ")
+#distance$country <- str_remove(distance$country, "Distance from ")
+#distance$country <- str_remove(distance$country, " to China")
+#distance$country <- str_remove(distance$country, "China to ")
 
-distance$distance <- str_remove(distance$distance, " km")
-distance$distance <- str_remove(distance$distance, ",")
-distance$distance <- as.numeric(distance$distance)
+#distance$distance <- str_remove(distance$distance, " km")
+#distance$distance <- str_remove(distance$distance, ",")
+#distance$distance <- as.numeric(distance$distance)
 
-distance$mileage <- str_remove(distance$mileage, " miles")
-distance$mileage <- str_remove(distance$mileage, ",")
-distance$mileage <- as.numeric(distance$mileage)
-
-distance <- distance %>% 
-  select(country, distance)
+#distance <- distance %>% 
+#  select(country, distance)
 
 ### trade data
 
@@ -120,25 +126,22 @@ finance <- read.csv("chinese_finance.csv")
 finance$usd_defl_2014 <- str_remove_all(finance$usd_defl_2014, ",")
 finance$usd_defl_2014 <- as.integer(finance$usd_defl_2014)
 
-finance$continent <- countrycode(sourcevar = finance$recipient_condensed,
-                              origin = "country.name",
-                              destination = "continent")
-
 finance_tree <- finance %>% 
-  group_by(continent, crs_sector_name) %>% 
+  group_by(recipient_region, crs_sector_name) %>% 
   summarise(total = sum(usd_defl_2014, na.rm = TRUE))
 
+finance_tree <- finance_tree %>% 
+  group_by(crs_sector_name) %>% 
+  mutate(pct_region = total*100/sum(total))
 
 
-
-  ggplotly(ggplot(finance_tree) +
-             geom_bar(aes(total, crs_sector_name, fill = continent), 
+ggplotly(ggplot(finance_tree) +
+             geom_bar(aes(pct_region, crs_sector_name, fill = recipient_region), 
                       stat= "identity", position = "fill") +
-             labs(title = "Chinese development finance per type and continent",
-                  y = "", x = "Total", fill = "Continent") +
+             labs(title = "Chinese development finance per type and region",
+                  y = "", x = "Total", fill = "Region") +
              theme_minimal() +
-             theme(title = element_text(face = "bold"),
-                   legend.position = "bottom"))
+             theme(title = element_text(face = "bold")))
 
 ## sectors through time
   
@@ -154,7 +157,7 @@ finance %>%
   theme_minimal() +
   labs(title = "Evolution of chinese finance per most relevant sector (2000-2017)",
        x = "", y = "Millions of USD (2014)", color = "Sector")  +
-  theme(title = element_text(face = "bold"))
+  theme(plot.title = element_text(face = "bold"))
 
   
 ## does trade or finance correlates with gdp per capita 

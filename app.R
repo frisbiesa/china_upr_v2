@@ -1,6 +1,5 @@
 library(tidyverse)
 library(shiny)
-library(maps)
 library(sf)
 library(spData)
 library(lubridate)
@@ -25,6 +24,19 @@ worlde <- world %>%
 mapamundi <- left_join(worlde, debt_stock, by = "country") %>% 
   left_join(comtrade_china_total, by = c("country", "year"))
 
+finance <- read.csv("chinese_finance.csv")
+
+finance$usd_defl_2014 <- str_remove_all(finance$usd_defl_2014, ",")
+finance$usd_defl_2014 <- as.integer(finance$usd_defl_2014)
+
+finance_tree <- finance %>% 
+  group_by(recipient_region, crs_sector_name) %>% 
+  summarise(total = sum(usd_defl_2014, na.rm = TRUE))
+
+finance_tree <- finance_tree %>% 
+  group_by(crs_sector_name) %>% 
+  mutate(pct_region = total*100/sum(total)) %>% 
+  select(-total)
 
 ui <- fluidPage(
   fluidRow(
@@ -55,8 +67,16 @@ ui <- fluidPage(
              ), fluid = TRUE
            )
     )
-  )
+  ),
+  fluidRow(
+    column(width = 12,
+           align = "center",
+           plotlyOutput("bar", 
+                          width = "100%")
+             ), fluid = TRUE
+           )
 )
+
 
 
 server <- function(input, output) {
@@ -92,9 +112,17 @@ server <- function(input, output) {
                                    title.hjust = .5))
    
   },height = 600, width = 600)
-}
 
-
+output$bar <- renderPlotly(ggplotly(ggplot(finance_tree) +
+                         geom_bar(aes(pct_region, crs_sector_name, fill = recipient_region), 
+                                  stat= "identity", position = "fill") +
+                         labs(title = "Chinese development finance per type and continent",
+                              y = "", x = "Total", fill = "Region") +
+                         theme_minimal() +
+                         theme(title = element_text(face = "bold"),
+                               legend.position = "bottom")))
+  
+  }
 
 shinyApp(ui = ui, server = server)
 

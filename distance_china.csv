@@ -1,251 +1,251 @@
-"","country","distance"
-"1","Andorra",8300
-"2","United Arab Emirates",5001
-"3","Afghanistan",3315
-"4","Antigua and Barbuda",13948
-"5","Anguilla",13854
-"6","Albania",7041
-"7","Armenia",5111
-"8","Angola",10408
-"9","Antarctica",14373
-"10","Argentina",18899
-"11","American Samoa",10504
-"12","Austria",7137
-"13","Australia",7474
-"14","Aruba",14600
-"15","Aland Islands",6309
-"16","Azerbaijan",4900
-"17","Bosnia and Herzegovina",7092
-"18","Barbados",14299
-"19","Bangladesh",1898
-"20","Belgium",7627
-"21","Burkina Faso",10587
-"22","Bulgaria",6568
-"23","Bahrain",5164
-"24","Burundi",8824
-"25","Benin",10453
-"26","Saint Barthelemy",13883
-"27","Bermuda",12348
-"28","Brunei",3647
-"29","Bolivia",17525
-"30","Bonaire, Saint Eustatius and Saba",14614
-"31","Brazil",16633
-"32","Bahamas",13242
-"33","Bhutan",1596
-"34","Bouvet Island",13830
-"35","Botswana",10557
-"36","Belarus",6016
-"37","Canada",9386
-"38","Cocos Islands",5397
-"39","Democratic Republic of the Congo",9592
-"40","Central African Republic",8971
-"41","Republic of the Congo",9875
-"42","Switzerland",7596
-"43","Ivory Coast",11255
-"44","Cook Islands",11892
-"45","Chile",19630
-"46","Cameroon",9693
-"47","Colombia",15516
-"48","Costa Rica",14875
-"49","Cuba",13631
-"50","Cape Verde",12128
-"51","Curacao",14626
-"52","Christmas Island",5152
-"53","Cyprus",6256
-"54","Czech Republic",6968
-"55","Germany",7224
-"56","Denmark",7031
-"57","Dominica",14114
-"58","Dominican Republic",13915
-"59","Algeria",9241
-"60","Ecuador",16223
-"61","Estonia",6071
-"62","Egypt",6883
-"63","Western Sahara",10621
-"64","Eritrea",6736
-"65","Spain",8788
-"66","Ethiopia",7051
-"67","Finland",5961
-"68","Fiji",9777
-"69","Falkland Islands",17825
-"70","Micronesia",6351
-"71","Faroe Islands",7529
-"72","France",8022
-"73","Gabon",10293
-"74","United Kingdom",7780
-"75","Grenada",14478
-"76","French Guiana",15000
-"77","Guernsey",8112
-"78","Ghana",10836
-"79","Gibraltar",9199
-"80","Greenland",7774
-"81","Gambia",11631
-"82","Guinea",11435
-"83","Equatorial Guinea",10254
-"84","Greece",7014
-"85","South Georgia and the South Sandwich Islands",16382
-"86","Guam",4750
-"87","Guinea-Bissau",11745
-"88","Guyana",15157
-"89","Hong Kong",1778
-"90","Heard Island and McDonald Islands",10325
-"91","Honduras",14232
-"92","Croatia",7211
-"93","Haiti",13907
-"94","Hungary",6814
-"95","Indonesia",4198
-"96","Ireland",8160
-"97","Israel",6320
-"98","Isle of Man",7911
-"99","India",2984
-"100","British Indian Ocean Territory",5839
-"101","Iraq",5460
-"102","Iran",4612
-"103","Iceland",7778
-"104","Italy",7566
-"105","Jersey",8101
-"106","Jamaica",14012
-"107","Jordan",6221
-"108","Japan",3047
-"109","Kenya",7894
-"110","Kyrgyzstan",2614
-"111","Cambodia",2592
-"112","Kiribati",10644
-"113","Comoros",8277
-"114","Saint Kitts and Nevis",13941
-"115","North Korea",2093
-"116","South Korea",2118
-"117","Kosovo",6917
-"118","Kuwait",5290
-"119","Cayman Islands",13853
-"120","Kazakhstan",3325
-"121","Laos",1787
-"122","Lebanon",6106
-"123","Liechtenstein",7489
-"124","Sri Lanka",3917
-"125","Liberia",11664
-"126","Lesotho",10765
-"127","Lithuania",6230
-"128","Latvia",6138
-"129","Libya",8078
-"130","Morocco",9634
-"131","Monaco",7824
-"132","Moldova",6177
-"133","Montenegro",7026
-"134","Saint Martin",13868
-"135","Madagascar",8557
-"136","Marshall Islands",6662
-"137","Macedonia",6900
-"138","Mali",10418
-"139","Myanmar",1744
-"140","Mongolia",1224
-"141","Macao",1768
-"142","Northern Mariana Islands",4711
-"143","Mauritania",10718
-"144","Montserrat",13993
-"145","Malta",7757
-"146","Mauritius",7946
-"147","Maldives",4915
-"148","Malawi",9133
-"149","Malaysia",3527
-"150","Mozambique",9422
-"151","Namibia",11113
-"152","New Caledonia",9028
-"153","Norfolk Island",9821
-"154","Nigeria",9909
-"155","Nicaragua",14507
-"156","Netherlands",7486
-"157","Norway",6891
-"158","Nepal",2059
-"159","Nauru",7621
-"160","Niue",10883
-"161","New Zealand",11167
-"162","Oman",4917
-"163","Peru",17048
-"164","French Polynesia",12601
-"165","Papua New Guinea",6261
-"166","Philippines",3103
-"167","Pakistan",3285
-"168","Poland",6640
-"169","Saint Pierre and Miquelon",10611
-"170","Pitcairn",14868
-"171","Puerto Rico",13924
-"172","Palestinian Territory",6239
-"173","Portugal",9158
-"174","Palau",4411
-"175","Paraguay",17848
-"176","Qatar",5143
-"177","Romania",6476
-"178","Serbia",6846
-"179","Russia",2855
-"180","Rwanda",8731
-"181","Saudi Arabia",5767
-"182","Solomon Islands",7736
-"183","Seychelles",6780
-"184","Sudan",7740
-"185","South Sudan",8020
-"186","Sweden",6379
-"187","Singapore",3837
-"188","Slovenia",7173
-"189","Svalbard and Jan Mayen",5901
-"190","Slovakia",6736
-"191","Sierra Leone",11716
-"192","Senegal",11483
-"193","Somalia",6815
-"194","Suriname",15136
-"195","Sao Tome and Principe",10678
-"196","El Salvador",14324
-"197","Sint Maarten",13873
-"198","Syria",5800
-"199","Swaziland",10303
-"200","Turks and Caicos Islands",13601
-"201","Chad",8608
-"202","French Southern Territories",10072
-"203","Togo",10630
-"204","Thailand",2246
-"205","Tajikistan",2913
-"206","Tokelau",10068
-"207","East Timor",5462
-"208","Turkmenistan",3918
-"209","Tunisia",8253
-"210","Tonga",10571
-"211","Turkey",5950
-"212","Trinidad and Tobago",14617
-"213","Tuvalu",9121
-"214","Tanzania",8597
-"215","Ukraine",5947
-"216","Uganda",8294
-"217","United States Minor Outlying Islands",6318
-"218","United States",11647
-"219","Uruguay",18139
-"220","Uzbekistan",3465
-"221","Vatican",7573
-"222","Saint Vincent and the Grenadines",14342
-"223","Venezuela",15216
-"224","British Virgin Islands",13866
-"225","U.S. Virgin Islands",13880
-"226","Vietnam",2458
-"227","Vanuatu",8710
-"228","Wallis and Futuna",9862
-"229","Samoa",10345
-"230","Yemen",5929
-"231","Mayotte",8222
-"232","South Africa",11237
-"233","Zambia",9669
-"234","Zimbabwe",9964
-"235","Netherlands Antilles",14612
-"236","Belize",13966
-"237","Djibouti",6692
-"238","Georgia",5188
-"239","Guadeloupe",14028
-"240","Guatemala",14075
-"241","Saint Lucia",14265
-"242","Luxembourg",7564
-"243","Martinique",14188
-"244","Mexico",12826
-"245","Niger",9402
-"246","Panama",15051
-"247","Reunion",8144
-"248","Saint Helena",12814
-"249","San Marino",7463
-"250","Taiwan",2103
+country,distance
+Andorra,8300
+United Arab Emirates,5001
+Afghanistan,3315
+Antigua and Barbuda,13948
+Anguilla,13854
+Albania,7041
+Armenia,5111
+Angola,10408
+Antarctica,14373
+Argentina,18899
+American Samoa,10504
+Austria,7137
+Australia,7474
+Aruba,14600
+Aland Islands,6309
+Azerbaijan,4900
+Bosnia and Herzegovina,7092
+Barbados,14299
+Bangladesh,1898
+Belgium,7627
+Burkina Faso,10587
+Bulgaria,6568
+Bahrain,5164
+Burundi,8824
+Benin,10453
+Saint Barthelemy,13883
+Bermuda,12348
+Brunei,3647
+Bolivia,17525
+"Bonaire, Saint Eustatius and Saba",14614
+Brazil,16633
+Bahamas,13242
+Bhutan,1596
+Bouvet Island,13830
+Botswana,10557
+Belarus,6016
+Canada,9386
+Cocos Islands,5397
+Democratic Republic of the Congo,9592
+Central African Republic,8971
+Republic of the Congo,9875
+Switzerland,7596
+Ivory Coast,11255
+Cook Islands,11892
+Chile,19630
+Cameroon,9693
+Colombia,15516
+Costa Rica,14875
+Cuba,13631
+Cape Verde,12128
+Curacao,14626
+Christmas Island,5152
+Cyprus,6256
+Czech Republic,6968
+Germany,7224
+Denmark,7031
+Dominica,14114
+Dominican Republic,13915
+Algeria,9241
+Ecuador,16223
+Estonia,6071
+Egypt,6883
+Western Sahara,10621
+Eritrea,6736
+Spain,8788
+Ethiopia,7051
+Finland,5961
+Fiji,9777
+Falkland Islands,17825
+Micronesia,6351
+Faroe Islands,7529
+France,8022
+Gabon,10293
+United Kingdom,7780
+Grenada,14478
+French Guiana,15000
+Guernsey,8112
+Ghana,10836
+Gibraltar,9199
+Greenland,7774
+Gambia,11631
+Guinea,11435
+Equatorial Guinea,10254
+Greece,7014
+South Georgia and the South Sandwich Islands,16382
+Guam,4750
+Guinea-Bissau,11745
+Guyana,15157
+Hong Kong,1778
+Heard Island and McDonald Islands,10325
+Honduras,14232
+Croatia,7211
+Haiti,13907
+Hungary,6814
+Indonesia,4198
+Ireland,8160
+Israel,6320
+Isle of Man,7911
+India,2984
+British Indian Ocean Territory,5839
+Iraq,5460
+Iran,4612
+Iceland,7778
+Italy,7566
+Jersey,8101
+Jamaica,14012
+Jordan,6221
+Japan,3047
+Kenya,7894
+Kyrgyzstan,2614
+Cambodia,2592
+Kiribati,10644
+Comoros,8277
+Saint Kitts and Nevis,13941
+North Korea,2093
+South Korea,2118
+Kosovo,6917
+Kuwait,5290
+Cayman Islands,13853
+Kazakhstan,3325
+Laos,1787
+Lebanon,6106
+Liechtenstein,7489
+Sri Lanka,3917
+Liberia,11664
+Lesotho,10765
+Lithuania,6230
+Latvia,6138
+Libya,8078
+Morocco,9634
+Monaco,7824
+Moldova,6177
+Montenegro,7026
+Saint Martin,13868
+Madagascar,8557
+Marshall Islands,6662
+Macedonia,6900
+Mali,10418
+Myanmar,1744
+Mongolia,1224
+Macao,1768
+Northern Mariana Islands,4711
+Mauritania,10718
+Montserrat,13993
+Malta,7757
+Mauritius,7946
+Maldives,4915
+Malawi,9133
+Malaysia,3527
+Mozambique,9422
+Namibia,11113
+New Caledonia,9028
+Norfolk Island,9821
+Nigeria,9909
+Nicaragua,14507
+Netherlands,7486
+Norway,6891
+Nepal,2059
+Nauru,7621
+Niue,10883
+New Zealand,11167
+Oman,4917
+Peru,17048
+French Polynesia,12601
+Papua New Guinea,6261
+Philippines,3103
+Pakistan,3285
+Poland,6640
+Saint Pierre and Miquelon,10611
+Pitcairn,14868
+Puerto Rico,13924
+Palestinian Territory,6239
+Portugal,9158
+Palau,4411
+Paraguay,17848
+Qatar,5143
+Romania,6476
+Serbia,6846
+Russia,2855
+Rwanda,8731
+Saudi Arabia,5767
+Solomon Islands,7736
+Seychelles,6780
+Sudan,7740
+South Sudan,8020
+Sweden,6379
+Singapore,3837
+Slovenia,7173
+Svalbard and Jan Mayen,5901
+Slovakia,6736
+Sierra Leone,11716
+Senegal,11483
+Somalia,6815
+Suriname,15136
+Sao Tome and Principe,10678
+El Salvador,14324
+Sint Maarten,13873
+Syria,5800
+Swaziland,10303
+Turks and Caicos Islands,13601
+Chad,8608
+French Southern Territories,10072
+Togo,10630
+Thailand,2246
+Tajikistan,2913
+Tokelau,10068
+East Timor,5462
+Turkmenistan,3918
+Tunisia,8253
+Tonga,10571
+Turkey,5950
+Trinidad and Tobago,14617
+Tuvalu,9121
+Tanzania,8597
+Ukraine,5947
+Uganda,8294
+United States Minor Outlying Islands,6318
+United States,11647
+Uruguay,18139
+Uzbekistan,3465
+Vatican,7573
+Saint Vincent and the Grenadines,14342
+Venezuela,15216
+British Virgin Islands,13866
+U.S. Virgin Islands,13880
+Vietnam,2458
+Vanuatu,8710
+Wallis and Futuna,9862
+Samoa,10345
+Yemen,5929
+Mayotte,8222
+South Africa,11237
+Zambia,9669
+Zimbabwe,9964
+Netherlands Antilles,14612
+Belize,13966
+Djibouti,6692
+Georgia,5188
+Guadeloupe,14028
+Guatemala,14075
+Saint Lucia,14265
+Luxembourg,7564
+Martinique,14188
+Mexico,12826
+Niger,9402
+Panama,15051
+Reunion,8144
+Saint Helena,12814
+San Marino,7463
+Taiwan,2103
