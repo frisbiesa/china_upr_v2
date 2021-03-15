@@ -52,15 +52,14 @@ plot <- function(df){
     geom_histogram(aes(bing, fill = bing), stat = "count") +
     scale_x_discrete(guide= guide_axis(angle = 45)) +
     labs(title = df) +
-    theme(legend.title = element_blank()) +
+    theme(legend.title = element_blank(),
+          axis.title.x = element_blank()) +
     theme(plot.title = element_text(size = 20, face = "bold"),
           axis.text=element_text(size=12),
           axis.title=element_text(size=14,face="bold"))
 }
 
 lapply(names(sentiment_list), plot)
-
-
 
 
 ##-----------------------------frequency, lemmas, and wordcloud-----------------------------
@@ -109,70 +108,6 @@ wordcloud(words = lemma_count$lemma, freq = lemma_count$n, min.freq = 10,
 
 dev.copy(png,'wordcloud.png')
 dev.off()
-
-#-----------------------------text cleaning trail before generalization----------------------------
-
-recommendations_2013 <- read_docx("Matrix_recommendations_2013.docx")
-recommendations_2013 <- docx_extract_all_tbls(recommendations_2013)
-
-recommendations_2013 <- as_tibble(recommendations_2013[[1]])
-recommendations_2013$Assessment.comments.on.level.of.implementation <- NULL
-
-##removing all rows which start with "theme"
-recommendations_2013 <-recommendations_2013 %>% 
-  filter(!str_detect(Recommendation, 'Theme:'))
-
-##splitting off first codes
-y <-  colsplit(recommendations_2013$Recommendation," ",c("code","recommendations"))
-
-##binding back together
-recommendations_2013 <- cbind(recommendations_2013, y)
-
-##dropping original column
-recommendations_2013$Recommendation <- NULL
-
-##use regex to remove ending redundant information from recommendations
-##Source: https://r4ds.had.co.nz/strings.html
-recommendations_2013$recommendations <- str_extract(recommendations_2013$recommendations, "(.*);")
-
-##found one instance where a typo in punctuation removed the string
-sum(is.na(recommendations_2013$recommendations))
-
-##adding back in
-line_49 <- "Develop programme for sharing of its experiences in addressing the right to development with African countries in the context of the Forum on China-Africa cooperation (Sierra Leone)"
-
-recommendations_2013[49,4] <- line_49
-
-##testing separating country comments
-recommendations_2013 <- separate(recommendations_2013, col = recommendations, into = c("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"), sep = ";", remove = FALSE)
-
-##replacing empty strings with NA
-recommendations_2013[recommendations_2013==""]<-NA
-recommendations_2013$recommendations <- NULL
-
-recommendations_2013 <- recommendations_2013 %>% pivot_longer(cols = a:k, values_to = "recommendations", values_drop_na = TRUE)
-
-recommendations_2013$name <- NULL
-
-##removing ()
-recommendations_2013$country <- str_extract(recommendations_2013$recommendations, "(?<=\\().+?(?=\\))")
-recommendations_2013$recommendations <- str_remove(recommendations_2013$recommendations, "\\([^()]*\\)")
-
-##source: https://stackoverflow.com/questions/640001/how-can-i-remove-text-within-parentheses-with-a-regex
-
-###for write-up, text analysis in french https://content.sciendo.com/configurable/contentpage/journals$002fadhi$002f3$002f1$002farticle-p112.xml
-
-recommendations_2013 <- separate(recommendations_2013, col = Full.list.of.themes, into = c("a", "b", "c", "d", "e", "f", "g", "h"), sep = "(?<=.)(?=\\D{1}\\d{2})", remove = TRUE)
-
-##sum(!is.na(test$h)) seeing if got enough columns
-
-##replacing empty strings with NA
-recommendations_2013[recommendations_2013==""]<-NA
-recommendations_2013$name <- NULL
-
-recommendations_2013 <- recommendations_2013 %>% pivot_longer(cols = a:h, values_to = "themes", values_drop_na = TRUE)
-
-##source: https://www.r-bloggers.com/2018/04/strsplit-but-keeping-the-delimiter/
 
 ### ------------------------ generalizing data cleaning ---------------------------------
 

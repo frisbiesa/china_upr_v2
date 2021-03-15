@@ -115,6 +115,8 @@ support_df <- long_join %>%
          Year, ChinaDebt_GDP, GDP_USDbn, values, time_dummy, variable, distance, total_debt_GDP, foreign_debt_gdp, GDP_percapita) %>%
   filter(variable == "support_score")
 
+##show correlation matrix 
+
 support_df %>% 
   select(-Country, -variable, -Year, -values, -time_dummy, -GDP_USDbn) %>% 
   cor(method = "kendall", use = "complete.obs")
@@ -178,11 +180,11 @@ recs_long %>%
 ols_1 <- lm(values ~ log(ChinaDebt_GDP+1) , data = recs_df)
 ols_2 <- lm(values ~ log(ChinaDebt_GDP+1) + distance, data = recs_df)
 ols_3 <- lm(values ~ log(ChinaDebt_GDP+1) + distance + foreign_debt_gdp, data = recs_df)
-
+ols_4 <- lm(values ~ log(ChinaDebt_GDP+1) + distance + foreign_debt_gdp + GDP_percapita, data = recs_df)
 ##note this is robust to controlling for distance from China (which should account for much of the variation in trade) 
 ##and also to controlling for overall foreign debt levels.  
 
-stargazer(ols_1, ols_2, ols_3, type='text', dep.var.labels = c("total comments"), out = "ols_comments.txt", title = "OLS--Total Comments with Controls" )
+stargazer(ols_1, ols_2, ols_3, ols_4, type='text', dep.var.labels = c("total comments"), out = "ols_comments.txt", title = "OLS--Total Comments with Controls" )
 
 diff_and_diff_fe <- lm(values ~ time_dummy*log(ChinaDebt_GDP+1) + factor(Country) - 1, data = recs_df)
 

@@ -1,6 +1,4 @@
 
-
-
 Diff and Diff--Support Scores with Controls
 =============================================================================================
                                                       Dependent variable:                    

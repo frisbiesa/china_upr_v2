@@ -1,6 +1,4 @@
 
-
-
 Diff and Diff--Total Comments with Controls
 =====================================================================================================
                                                           Dependent variable:                        
