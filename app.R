@@ -3,6 +3,7 @@ library(shiny)
 library(sf)
 library(spData)
 library(lubridate)
+library(plotly)
 
 ## data on china 
 
