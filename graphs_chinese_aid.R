@@ -30,19 +30,23 @@ ggplot(visits) +
 
 ## evolution of total chinese finance per continent
 
-debt %>%
+plot_1 <- debt %>%
   group_by(year, continent) %>%
   summarise(total = sum(debt_usd, na.rm = TRUE)/1000000) %>% 
   ggplot() +
+  geom_point(aes(year, total, color = continent), stat = "identity") +
   geom_line(aes(year, total, color = continent), stat = "identity") +
   theme_minimal() +
   labs(title = "Evolution of chinese finance per continent (2000-2017)",
-       x = "", y = "Millions of USD", color = "Continent")  +
-  theme(title = element_text(face = "bold")) 
+       x = "", y = "Millions of USD", color = "Continent", caption = "Source: Horn, Sebastian, Carmen M. Reinhart, and Christoph Trebesch. 2019. 'China's Overseas Lending.' NBER Working Paper No. 26050.") +
+  theme(legend.position = "none", 
+        plot.title = element_text(face = "bold", family = "serif", size = 24))
+
+ggplotly(plot_1)
 
 ## growth rate of total chinese invsetments - we would have to fix the start
 
-debt %>%
+plot_2 <- debt %>%
   group_by(year) %>%
   summarise(total = sum(debt_usd, na.rm = TRUE)) %>% 
   arrange(year) %>%
@@ -50,6 +54,7 @@ debt %>%
          diff_growth = total - lag(total), 
          growth_rate = (diff_growth / diff_year)/lag(total) * 100) %>% 
   ggplot() +
+  geom_point(aes(year, growth_rate), color = "brown", size = 1.5, stat = "identity") +
   geom_line(aes(year, growth_rate), color = "brown", size = 1, stat = "identity") +
   theme_minimal() +
   labs(title = "Growth rate of total investments from China", y = "Growth Rate (%)", x = "",
@@ -57,6 +62,7 @@ debt %>%
   theme(legend.position = "none", 
         plot.title = element_text(face = "bold", family = "serif", size = 24))
 
+ggplotly(plot_2)
 
 ## distance data for controlling
 
