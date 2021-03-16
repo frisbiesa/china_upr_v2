@@ -13,6 +13,10 @@ library(purrr)
 library(readr)
 library(reshape2)
 library(rlist)
+<<<<<<< HEAD
+library(varhandle)
+=======
+>>>>>>> master
 
 
 setwd ("~/Desktop/Desktop - MacBook Pro/Data and Programming II/final project/Fortunato-Frisbie-final-project")
@@ -48,13 +52,20 @@ names(sentiment_list) <- c("Comments About China in 2013", "Comments About China
 
 plot <- function(df){
     ggplot(data = sentiment_list[[df]] %>% filter(!is.na(bing))) +
-    geom_histogram(aes(bing), stat = "count") +
+    geom_histogram(aes(bing, fill = bing), stat = "count") +
     scale_x_discrete(guide= guide_axis(angle = 45)) +
-    labs(title = df)
+    labs(title = df) +
+    theme(legend.title = element_blank(),
+          axis.title.x = element_blank()) +
+    theme(plot.title = element_text(size = 20, face = "bold"),
+          axis.text=element_text(size=12),
+          axis.title=element_text(size=14,face="bold"))
 }
 
 lapply(names(sentiment_list), plot)
 
+<<<<<<< HEAD
+=======
 
 
 
@@ -107,13 +118,124 @@ dev.copy(png,'wordcloud.png')
 dev.off()
 
 #-----------------------------text cleaning--------------------------------------------------
+>>>>>>> master
 
-recommendations_2013 <- read_docx("Matrix_recommendations_2013.docx")
-recommendations_2013 <- docx_extract_all_tbls(recommendations_2013)
+##-----------------------------frequency, lemmas, and wordcloud-----------------------------
 
-recommendations_2018 <- read_docx("Matrix_recommendations_2018.docx")
-recommendations_2018 <- docx_extract_all_tbls(recommendations_2018)
+freq_list <- list()
 
+for (i in names(sentiment_list)) {
+freq_list[[i]] <- count(sentiment_list[[i]], word_tokens, sort = TRUE)
+}
+
+
+##simple bag-of-words approach with lemmas for both documents combined
+
+lemma_list <- list()
+
+for (i in filenames){
+s <- read_file(i)
+text_df <- tibble(text = s)
+df_udp <- udpipe(text_df$text, "english")
+
+test_lemmas <- df_udp %>% 
+  filter(upos != "PUNCT") %>% 
+  anti_join(stop_words, by = c("lemma" = "word"))
+
+test_lemmas$lemma <- removeNumbers(test_lemmas$lemma)
+test_lemmas$lemma <- removePunctuation(test_lemmas$lemma) 
+test_lemma <- test_lemmas %>% select(token, lemma)
+
+lemma_list <- append(lemma_list, list(test_lemma))
+
+}
+
+lemma_list <- list.stack(lemma_list)
+
+
+lemma_count <- print(lemma_list %>%
+                       group_by(lemma) %>%
+                       filter(lemma != "" & lemma != "Ahrcadd" & lemma != "Sdg") %>%
+                       filter(!grepl("(^| ).( |$)", lemma)) %>%
+                       summarise(n = n()) %>%
+                       arrange(desc(n)))
+
+wordcloud(words = lemma_count$lemma, freq = lemma_count$n, min.freq = 10,
+          max.words=500, random.order=FALSE, rot.per=0.35, scale=c(2,0.25),
+          colors=brewer.pal(8, "Dark2"))
+
+dev.copy(png,'wordcloud.png')
+dev.off()
+
+### ------------------------ generalizing data cleaning ---------------------------------
+
+
+filenames_docs <- c("Matrix_recommendations_2013.docx", "Matrix_recommendations_2018.docx")
+text_cleaning_list <- list()
+
+for (i in filenames_docs){
+  s <- read_docx(i)
+  s <- docx_extract_all_tbls(s)
+  s <- as_tibble(s[[1]])
+  s$Assessment.comments.on.level.of.implementation <- NULL
+  
+  ##removing all rows which start with "theme"
+  
+  s <- s %>% 
+    filter(!str_detect(Recommendation, 'Theme:'))
+  
+  ##splitting off first codes
+  y <-  colsplit(s$Recommendation," ",c("code","recommendations"))
+  
+  ##binding back together
+  s <- cbind(s, y)
+  
+  ##dropping original column
+  s$Recommendation <- NULL
+  
+  ##use regex to remove ending redundant information from recommendations
+  ##Source: https://r4ds.had.co.nz/strings.html
+  s$recommendations <- str_extract(s$recommendations, "(.*);")
+  
+  ##separating country comments
+  s <- separate(s, col = recommendations, into = c("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"), sep = ";", remove = FALSE)
+  
+  ##replacing empty strings with NA
+  s[s==""]<-NA
+  s$recommendations <- NULL
+  
+  s <- s %>% pivot_longer(cols = a:k, values_to = "recommendations", values_drop_na = TRUE)
+  
+  s$name <- NULL
+  
+  ##removing ()
+  s$country <- str_extract(s$recommendations, "(?<=\\().+?(?=\\))")
+  s$recommendations <- str_remove(s$recommendations, "\\([^()]*\\)")
+  
+  ##cleaning theme column and separating
+  s <- separate(s, col = Full.list.of.themes, into = c("a", "b", "c", "d", "e", "f", "g", "h"), sep = "(?<=.)(?=[a-zA-Z]\\d{1,2})", remove = TRUE)
+  s <- s %>% pivot_longer(cols = a:h, values_to = "themes", values_drop_na = TRUE)
+  
+  s[s==""]<-NA
+  s$name <- NULL
+  
+  ##saving a list of themes
+  theme_list <- unique(s$themes)
+  theme_list <- as_tibble(theme_list)
+  
+  s <- separate(s, col = themes, into = c("theme_code", "description"), sep = "\\s|\\-", extra = "merge", remove = TRUE)
+  
+  names(s) <- tolower(names(s))
+  
+  text_cleaning_list <- append(text_cleaning_list, list(s))
+}
+
+<<<<<<< HEAD
+names(text_cleaning_list) <- filenames_docs  # Define names of df's
+
+write_csv(text_cleaning_list[[1]], "text_cleaning_list_2013.csv")
+write_csv(text_cleaning_list[[2]], "text_cleaning_list_2018.csv")
+=======
 recommendations_2013 <- as_tibble(recommendations_2013[[1]])
 recommendations_2013$Assessment.comments.on.level.of.implementation <- NULL
 
@@ -230,6 +352,7 @@ for (i in filenames_docs){
   
   text_cleaning_list <- append(text_cleaning_list, list(s))
 }
+>>>>>>> master
 
 names(text_cleaning_list) <- filenames_docs  # Define names of df's
 
