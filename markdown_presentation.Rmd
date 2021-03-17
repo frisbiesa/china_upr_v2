@@ -1,5 +1,7 @@
 ---
 title: Chinese Debt and Political Influence As measured through Country Recommendations in the UN Universal Periodic Review
+subtitle: PPHA 30536 Data And Programming For Public Policy II Winter 2021, Final Project
+author: Andrés Fortunato & Sonnet Frisbie
 output: 
   html_notebook: 
     fig_width: 10
@@ -245,7 +247,8 @@ plot_4 <- finance %>%
   geom_bar(aes(total, fct_reorder(crs_sector_name, total), fill = total), stat = "identity") +
   labs(title = "Total USD commited in development projects per sector", x = "USD deflated to 2014", y = "", 
        caption = "Source: aiddata.org") +
-  theme_minimal()
+  theme_minimal() +
+  theme(legend.position = "none")
 
 ggplotly(plot_4)
 ```
@@ -355,8 +358,4 @@ The OLS was significant at the 5% level across the board, and was robust to incl
 
 This result begs further investigation.  It does appear that there is a clear negative relationship between debt to China and overall fewer comments in China’s UPR (see table 2).  However, unfortunately the UPR is only every 5 years and began in 2009.  The results of the initial 2009 UPR were not captured in a matrix of recommendations like the 2013 and 2018 UPRs were.  By 2013, the trend of Chinese investment was already well advanced globally, so the diff and diff is not able to capture this variation.  For future work, we recommend attempting to pull the 2009 UPR data and format it to include in the study.  We also would recommend including future  UPRs to see if this relationship holds, and if we can use the diff and diff more effectively with more observations to make a causal link.    
 
-## Appendices
-
-Regression Tables
-
-
+For graphs and tables go [here]("https://docs.google.com/document/d/1xcg-J1DZ_3CSlDrCCroe4orFsg-wu4LmAiBgrJSFC2E/edit?usp=sharing")
