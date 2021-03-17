@@ -19,12 +19,12 @@ clean_2018 <- read_csv("text_cleaning_list_2018.csv")
 
 get_support_scores <- function(x){
   country_support_score <- x %>% 
-    group_by(country, Position) %>%
+    group_by(country, position) %>%
     summarise(n = n())
   
   country_support_score <-
     country_support_score %>%
-    pivot_wider(names_from = Position, values_from = n) %>%
+    pivot_wider(names_from = position, values_from = n) %>%
     replace_na(list(Noted = 0)) %>%
     mutate(support_score = Supported-Noted)
 }
@@ -51,7 +51,7 @@ joint_support_scores <- joint_support_scores %>%
 
 ##writing to use later in regression
 
-write_csv(joint_support_scores, "joint_support_scores.csv")
+#write_csv(joint_support_scores, "joint_support_scores.csv")
 
 joint_support_scores <- joint_support_scores %>% 
   mutate(diff_support_score = support_score_18-support_score_13) %>%
@@ -87,15 +87,15 @@ unique(clean_2013$theme_code)
 require(data.table)
 
 theme_response <- clean_2013 %>% 
-  group_by(Position, theme_code, description) %>%
+  group_by(position, theme_code, description) %>%
   summarise(n = n()) %>%
-  group_by(Position) %>%
-  arrange(desc(n)) 
+  group_by(position) %>%
+  arrange(desc(n))
 
 
 
 theme_response_subset <- data.table(theme_response, key="n")
-theme_response_subset <- theme_response_subset[, tail(.SD, 5), by=Position]    
+theme_response_subset <- theme_response_subset[, tail(.SD, 5), by=position]    
 
 theme_response_subset[1, 3] <- "Civil & political rights (disappeared people)"
 theme_response_subset[3, 3] <- "Civil & political rights (general)"
@@ -105,7 +105,7 @@ theme_response_subset[6, 3] <- "Economic, social & cultural rights"
 theme_response_subset %>%
   mutate(description = fct_reorder(description, n))  %>%
   ggplot(aes(x = description, y = n)) +
-  geom_col(position = "dodge", aes(fill = Position)) +
+  geom_col(position = "dodge", aes(fill = position)) +
   coord_flip() +
   theme(legend.position="bottom") +
   labs(title = "Top Five Categories for Accepted (Positive) and Noted (Negative) Chinese Responses", y = "Number of Comments per Theme", x = "") +
@@ -115,14 +115,14 @@ theme_response_subset %>%
 ##-----------------------------trying a treemap instead---------------------------------
 
 theme_response_tree <- data.table(theme_response, key="n")
-theme_response_tree <- theme_response_tree[, tail(.SD, 15), by=Position]    
+theme_response_tree <- theme_response_tree[, tail(.SD, 15), by=position]    
 
 theme_response_tree$description <- gsub("\\-.*","",theme_response_tree$description)
 
 theme_response_tree[29,3] <- "Equality and non-Discrimination"
 
 p <- treemap(dtf = theme_response_tree, 
-        index = c("Position", "description"), 
+        index = c("position", "description"), 
         vSize = "n", 
         type = "index",
         palette = "Set1",
@@ -140,7 +140,7 @@ dev.copy(png,'static_tree_map')
 dev.off()
 
 test_d3_tree <- d3tree2(p,  rootname = "Themes by Support Status" )
-
+test_d3_tree
 ##saving my html widget
 
 saveWidget(test_d3_tree, file=paste0(getwd(), "/interactiveTreemap.html"))

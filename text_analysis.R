@@ -13,10 +13,7 @@ library(purrr)
 library(readr)
 library(reshape2)
 library(rlist)
-<<<<<<< HEAD
 library(varhandle)
-=======
->>>>>>> master
 
 
 setwd ("~/Desktop/Desktop - MacBook Pro/Data and Programming II/final project/Fortunato-Frisbie-final-project")
