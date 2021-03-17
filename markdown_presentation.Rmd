@@ -41,6 +41,8 @@ library(udpipe)
 library(knitr)
 ```
 
+
+
 ## Data
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
@@ -239,7 +241,7 @@ plot_4 <- finance %>%
   group_by(crs_sector_name) %>% 
   summarise(total = sum(usd_defl_2014, na.rm = TRUE)) %>% 
   ggplot() +
-  geom_bar(aes(total, fct_reorder(crs_sector_name, total)), stat = "identity") +
+  geom_bar(aes(total, fct_reorder(crs_sector_name, total), fill = total), stat = "identity") +
   labs(title = "Total USD commited in development projects per sector", x = "USD deflated to 2014", y = "") +
   theme_minimal()
 
@@ -338,7 +340,7 @@ As an interesting side-project, we analyzed which categories of recommendations 
 
 ```
 
-##Analysis
+## Statistical Analysis
 
 The primary file for this section is statistical_analysis.R.  This stage involved some data transformation in order to get it into a usable “long” format.  We also at this stage imported several more variables from World Development Indicators and the Economist Intelligence unit to use as controls.  
 
@@ -354,12 +356,8 @@ The OLS was significant at the 5% level across the board, and was robust to incl
 
 This result begs further investigation.  It does appear that there is a clear negative relationship between debt to China and overall fewer comments in China’s UPR (see table 2).  However, unfortunately the UPR is only every 5 years and began in 2009.  The results of the initial 2009 UPR were not captured in a matrix of recommendations like the 2013 and 2018 UPRs were.  By 2013, the trend of Chinese investment was already well advanced globally, so the diff and diff is not able to capture this variation.  For future work, we recommend attempting to pull the 2009 UPR data and format it to include in the study.  We also would recommend including future  UPRs to see if this relationship holds, and if we can use the diff and diff more effectively with more observations to make a causal link.    
 
-##Appendices
+## Appendices
 
-`Regression Tables
+Regression Tables
 
 
-```{r}
-img1_path <- "www/comments_about_china_2013.png"
-include_graphics(img1_path)
-```
