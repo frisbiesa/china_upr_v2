@@ -1,160 +1,162 @@
-country,Supported_13,Noted_13,support_score_13,Noted_18,Supported_18,support_score_18,total_recs_13,total_recs_18,total_recommendations
-Afghanistan,2,0,2,4,2,-2,2,6,8
+country,Supported_13,Noted_13,support_score_13,Supported_18,Noted_18,support_score_18,total_recs_13,total_recs_18,total_recommendations
+Afghanistan,2,0,2,2,4,-2,2,6,8
 Albania,1,8,-7,0,0,0,9,0,9
-Algeria,7,0,7,0,8,8,7,8,15
-Angola,4,0,4,0,7,7,4,7,11
-Argentina,3,6,-3,2,4,2,9,6,15
-Australia,12,5,7,10,8,-2,17,18,35
-Austria,8,3,5,3,5,2,11,8,19
-Azerbaijan,5,0,5,0,14,14,5,14,19
-Bahrain,1,0,1,0,8,8,1,8,9
-Bangladesh,4,0,4,0,5,5,4,5,9
-Belarus,5,0,5,0,6,6,5,6,11
-Belgium,1,8,-7,4,7,3,9,11,20
-Benin,3,4,-1,0,3,3,7,3,10
-Bhutan,4,0,4,0,4,4,4,4,8
+Algeria,7,0,7,8,0,8,7,8,15
+Angola,4,0,4,7,0,7,4,7,11
+Argentina,3,6,-3,4,2,2,9,6,15
+Australia,12,5,7,8,10,-2,17,18,35
+Austria,8,3,5,5,3,2,11,8,19
+Azerbaijan,5,0,5,14,0,14,5,14,19
+Bahrain,1,0,1,8,0,8,1,8,9
+Bangladesh,4,0,4,5,0,5,4,5,9
+Belarus,5,0,5,6,0,6,5,6,11
+Belgium,1,8,-7,7,4,3,9,11,20
+Benin,3,4,-1,3,0,3,7,3,10
+Bhutan,4,0,4,4,0,4,4,4,8
 Bolivia (Plurinational S tate of,1,0,1,0,0,0,1,0,1
 Bolivia (Plurinational State of,3,0,3,0,0,0,3,0,3
-Botswana,5,0,5,0,5,5,5,5,10
+Botswana,5,0,5,5,0,5,5,5,10
 Brazil,3,2,1,3,3,0,5,6,11
-Brunei Darussalam,4,0,4,0,6,6,4,6,10
-Bulgaria,4,3,1,0,4,4,7,4,11
-Burundi,1,0,1,0,4,4,1,4,5
-Cambodia,6,0,6,0,5,5,6,5,11
-Canada,5,12,-7,7,2,-5,17,9,26
+Brunei Darussalam,4,0,4,6,0,6,4,6,10
+Bulgaria,4,3,1,4,0,4,7,4,11
+Burundi,1,0,1,4,0,4,1,4,5
+Cambodia,6,0,6,5,0,5,6,5,11
+Canada,5,12,-7,2,7,-5,17,9,26
 Cape Verde,3,0,3,0,0,0,3,0,3
-Central African Republic,6,0,6,0,2,2,6,2,8
+Central African Republic,6,0,6,2,0,2,6,2,8
 Chad,9,0,9,0,0,0,9,0,9
-Chile,1,5,-4,3,5,2,6,8,14
-Comoros,2,0,2,0,2,2,2,2,4
-Congo,4,0,4,0,5,5,4,5,9
-Costa Rica,3,2,1,7,8,1,5,15,20
-Côte d’Ivoire,5,0,5,0,5,5,5,5,10
-Cuba,9,0,9,0,4,4,9,4,13
-Cyprus,3,0,3,2,0,0,3,2,5
+Chile,1,5,-4,5,3,2,6,8,14
+Comoros,2,0,2,2,0,2,2,2,4
+Congo,4,0,4,5,0,5,4,5,9
+Costa Rica,3,2,1,8,7,1,5,15,20
+Côte d’Ivoire,5,0,5,5,0,5,5,5,10
+Cuba,9,0,9,4,0,4,9,4,13
+Cyprus,3,0,3,0,2,0,3,2,5
 Czech Republic,4,9,-5,0,0,0,13,0,13
-Democratic People’s Republic of Korea,2,0,2,0,8,8,2,8,10
-Democratic Republic of the Congo,5,0,5,0,3,3,5,3,8
-Denmark,3,3,0,5,2,-3,6,7,13
-Djibouti,2,0,2,0,7,7,2,7,9
-Ecuador,6,0,6,0,1,1,6,1,7
-Egypt,7,0,7,0,7,7,7,7,14
-Eritrea,6,0,6,0,5,5,6,5,11
-Estonia,0,8,0,9,10,1,8,19,27
-Ethiopia,5,0,5,0,5,5,5,5,10
+Democratic People’s Republic of Korea,2,0,2,8,0,8,2,8,10
+Democratic Republic of the Congo,5,0,5,3,0,3,5,3,8
+Denmark,3,3,0,2,5,-3,6,7,13
+Djibouti,2,0,2,7,0,7,2,7,9
+Ecuador,6,0,6,1,0,1,6,1,7
+Egypt,7,0,7,7,0,7,7,7,14
+Eritrea,6,0,6,5,0,5,6,5,11
+Estonia,0,8,0,10,9,1,8,19,27
+Ethiopia,5,0,5,5,0,5,5,5,10
 Finland,4,0,4,4,4,0,4,8,12
-France,5,18,-13,10,9,-1,23,19,42
-Gabon,1,0,1,0,8,8,1,8,9
-Germany,8,4,4,4,6,2,12,10,22
-Ghana,8,2,6,0,4,4,10,4,14
+France,5,18,-13,9,10,-1,23,19,42
+Gabon,1,0,1,8,0,8,1,8,9
+Germany,8,4,4,6,4,2,12,10,22
+Ghana,8,2,6,4,0,4,10,4,14
 Guatemala,4,0,4,0,0,0,4,0,4
-Hungary,2,5,-3,5,2,-3,7,7,14
-Iceland,3,0,3,5,2,-3,3,7,10
-India,5,0,5,0,6,6,5,6,11
-Indonesia,3,0,3,4,6,2,3,10,13
+Hungary,2,5,-3,2,5,-3,7,7,14
+Iceland,3,0,3,2,5,-3,3,7,10
+India,5,0,5,6,0,6,5,6,11
+Indonesia,3,0,3,6,4,2,3,10,13
 Iran (Islamic Republic of,5,0,5,0,0,0,5,0,5
-Iraq,2,0,2,0,8,8,2,8,10
+Iraq,2,0,2,6,0,6,2,6,8
 Ireland,10,0,10,3,3,0,10,6,16
-Italy,8,8,0,2,10,8,16,12,28
-Japan,2,4,-2,6,0,0,6,6,12
-Jordan,6,0,6,0,7,7,6,7,13
-Kenya,2,0,2,0,3,3,2,3,5
-Kuwait,4,0,4,0,10,10,4,10,14
-Kyrgyzstan,1,0,1,0,4,4,1,4,5
-Latvia,5,1,4,7,3,-4,6,10,16
-Lebanon,2,0,2,0,5,5,2,5,7
-Lesotho,4,0,4,0,2,2,4,2,6
-Malaysia,7,0,7,0,7,7,7,7,14
-Maldives,0,8,0,0,2,2,8,2,10
-Mali,5,0,5,2,0,0,5,2,7
-Mauritius,4,0,4,0,5,5,4,5,9
-Mexico,9,0,9,0,7,7,9,7,16
+Italy,8,8,0,10,2,8,16,12,28
+Japan,2,4,-2,0,6,0,6,6,12
+Jordan,6,0,6,7,0,7,6,7,13
+Kenya,2,0,2,3,0,3,2,3,5
+Kuwait,4,0,4,10,0,10,4,10,14
+Kyrgyzstan,1,0,1,2,0,2,1,2,3
+Latvia,5,1,4,3,7,-4,6,10,16
+Lebanon,2,0,2,5,0,5,2,5,7
+Lesotho,4,0,4,2,0,2,4,2,6
+Malaysia,7,0,7,7,0,7,7,7,14
+Maldives,0,8,0,2,0,2,8,2,10
+Mali,5,0,5,0,2,0,5,2,7
+Mauritius,4,0,4,5,0,5,4,5,9
+Mexico,9,0,9,7,0,7,9,7,16
 Mongolia,2,0,2,0,0,0,2,0,2
-Morocco,8,0,8,0,7,7,8,7,15
-Mozambique,5,0,5,0,6,6,5,6,11
-Myanmar,4,0,4,0,8,8,4,8,12
-Namibia,4,3,1,2,5,3,7,7,14
-Nepal,4,0,4,0,7,7,4,7,11
-Netherlands,10,0,10,4,2,-2,10,6,16
-New Zealand,2,7,-5,6,8,2,9,14,23
+Morocco,8,0,8,7,0,7,8,7,15
+Mozambique,5,0,5,6,0,6,5,6,11
+Myanmar,4,0,4,8,0,8,4,8,12
+Namibia,4,3,1,5,2,3,7,7,14
+Nepal,4,0,4,7,0,7,4,7,11
+Netherlands,10,0,10,2,4,-2,10,6,16
+New Zealand,2,7,-5,8,6,2,9,14,23
 NHRAP,2,0,2,0,0,0,2,0,2
 Niger,5,0,5,0,0,0,5,0,5
-Nigeria,4,0,4,0,9,9,4,9,13
-Norway,1,5,-4,6,4,-2,6,10,16
-Oman,2,0,2,0,4,4,2,4,6
-Pakistan,5,0,5,0,7,7,5,7,12
-Poland,9,2,7,2,5,3,11,7,18
+Nigeria,4,0,4,9,0,9,4,9,13
+Norway,1,5,-4,4,6,-2,6,10,16
+Oman,2,0,2,4,0,4,2,4,6
+Pakistan,5,0,5,7,0,7,5,7,12
+Poland,9,2,7,5,2,3,11,7,18
 Portugal,3,7,-4,6,6,0,10,12,22
-Qatar,6,0,6,0,7,7,6,7,13
-Republic of Korea,8,4,4,5,6,1,12,11,23
-Republic of Moldova,3,0,3,0,12,12,3,12,15
+Qatar,6,0,6,7,0,7,6,7,13
+Republic of Korea,8,4,4,6,5,1,12,11,23
+Republic of Moldova,3,0,3,12,0,12,3,12,15
 Romania,1,0,1,0,0,0,1,0,1
-Russian Federation,15,0,15,0,6,6,15,6,21
-Rwanda,0,1,0,2,5,3,1,7,8
-Saudi Arabia,3,0,3,0,8,8,3,8,11
-Senegal,3,0,3,0,2,2,3,2,5
-Serbia,5,0,5,0,5,5,5,5,10
+Russian Federation,15,0,15,6,0,6,15,6,21
+Rwanda,0,1,0,5,2,3,1,7,8
+Saudi Arabia,3,0,3,8,0,8,3,8,11
+Senegal,3,0,3,2,0,2,3,2,5
+Serbia,5,0,5,5,0,5,5,5,10
 Seychelles,4,0,4,2,2,0,4,4,8
 Sierra Le one,0,4,0,0,0,0,4,0,4
 Sierra Leone,5,0,5,0,0,0,5,0,5
-Singapore,2,0,2,0,4,4,2,4,6
+Singapore,2,0,2,4,0,4,2,4,6
 Slovakia,7,0,7,0,0,0,7,0,7
-Slovenia,6,1,5,2,8,6,7,10,17
-South Africa,14,0,14,0,2,2,14,2,16
+Slovenia,6,1,5,8,2,6,7,10,17
+South Africa,14,0,14,2,0,2,14,2,16
 South Sudan,7,0,7,0,0,0,7,0,7
-Spain,0,11,0,5,2,-3,11,7,18
-Sri Lanka,6,0,6,3,5,2,6,8,14
-State of Palestine,8,0,8,0,2,2,8,2,10
+Spain,0,11,0,2,5,-3,11,7,18
+Sri Lanka,6,0,6,5,3,2,6,8,14
+State of Palestine,8,0,8,2,0,2,8,2,10
 Sudan,1,0,1,0,0,0,1,0,1
-Sweden,2,7,-5,4,9,5,9,13,22
+Sweden,2,7,-5,9,4,5,9,13,22
 Switzerland,8,3,5,6,6,0,11,12,23
-Syrian Arab Republic,1,0,1,0,6,6,1,6,7
-Tajikistan,4,0,4,0,7,7,4,7,11
-Thailand,2,0,2,0,4,4,2,4,6
+Syrian Arab Republic,1,0,1,6,0,6,1,6,7
+Tajikistan,4,0,4,7,0,7,4,7,11
+Thailand,2,0,2,4,0,4,2,4,6
 Timor-Leste,3,0,3,0,0,0,3,0,3
-Togo,3,0,3,0,2,2,3,2,5
-Tunisia,2,9,-7,0,10,10,11,10,21
-Turkmenistan,4,0,4,0,7,7,4,7,11
-Uganda,4,0,4,0,6,6,4,6,10
-Ukraine,1,0,1,5,3,-2,1,8,9
-United Arab Emirates,1,0,1,0,6,6,1,6,7
-United Kingdom of Great Britain and Northern Ireland,0,3,0,5,0,0,3,5,8
-United States of America,1,8,-7,11,0,0,9,11,20
-Uruguay,14,0,14,0,6,6,14,6,20
-Uzbekistan,4,0,4,0,3,3,4,3,7
+Togo,3,0,3,2,0,2,3,2,5
+Tunisia,2,9,-7,10,0,10,11,10,21
+Turkmenistan,4,0,4,7,0,7,4,7,11
+Uganda,4,0,4,6,0,6,4,6,10
+Ukraine,1,0,1,3,5,-2,1,8,9
+United Arab Emirates,1,0,1,6,0,6,1,6,7
+United Kingdom of Great Britain and Northern Ireland,0,3,0,0,5,0,3,5,8
+United States of America,1,8,-7,0,11,0,9,11,20
+Uruguay,14,0,14,6,0,6,14,6,20
+Uzbekistan,4,0,4,3,0,3,4,3,7
 Venezuela (Bolivarian Republic of,1,0,1,0,0,0,1,0,1
-Viet Nam,7,0,7,0,5,5,7,5,12
-Yemen,2,0,2,0,1,1,2,1,3
-Zambia,3,0,3,0,1,1,3,1,4
-Zimbabwe,3,0,3,0,3,3,3,3,6
-Armenia,0,0,0,0,5,5,0,5,5
-Bolivarian Republic of Venezuela,0,0,0,0,5,5,0,5,5
-Cameroon,0,0,0,0,8,8,0,8,8
-Colombia,0,0,0,4,5,1,0,9,9
-Croatia,0,0,0,2,5,3,0,7,7
-Czechia,0,0,0,13,0,0,0,13,13
-Dominican Republic,0,0,0,0,9,9,0,9,9
-El Salvador,0,0,0,3,1,-2,0,4,4
-Equatorial Guinea,0,0,0,0,7,7,0,7,7
-Fiji,0,0,0,0,10,10,0,10,10
-Georgia,0,0,0,0,5,5,0,5,5
-Greece,0,0,0,0,10,10,0,10,10
-Guinea,0,0,0,0,6,6,0,6,6
-Guyana,0,0,0,0,6,6,0,6,6
-Haiti,0,0,0,0,7,7,0,7,7
-Honduras,0,0,0,5,2,-3,0,7,7
-ILO,0,0,0,5,0,0,0,5,5
-Islamic Republic of Iran,0,0,0,0,7,7,0,7,7
-Lao People’s Democratic Republic,0,0,0,0,4,4,0,4,4
-Libya,0,0,0,0,8,8,0,8,8
-Liechtenstein,0,0,0,13,5,-8,0,18,18
-Luxembourg,0,0,0,5,6,1,0,11,11
-Madagascar,0,0,0,0,7,7,0,7,7
-Malta,0,0,0,0,3,3,0,3,3
-Montenegro,0,0,0,0,2,2,0,2,2
-Peru,0,0,0,0,13,13,0,13,13
-Philippines,0,0,0,4,8,4,0,12,12
-Plurinational State of Bolivia,0,0,0,0,8,8,0,8,8
-the Paris Principles,0,0,0,4,0,0,0,4,4
-United Republic of Tanzania,0,0,0,0,6,6,0,6,6
-NA,0,0,0,0,7,7,0,7,7
+Viet Nam,7,0,7,5,0,5,7,5,12
+Yemen,2,0,2,1,0,1,2,1,3
+Zambia,3,0,3,1,0,1,3,1,4
+Zimbabwe,3,0,3,3,0,3,3,3,6
+2011–2020,0,0,0,2,0,2,0,2,2
+2016–2020,0,0,0,2,0,2,0,2,2
+Armenia,0,0,0,5,0,5,0,5,5
+Bolivarian Republic of Venezuela,0,0,0,5,0,5,0,5,5
+Cameroon,0,0,0,8,0,8,0,8,8
+Colombia,0,0,0,5,4,1,0,9,9
+Croatia,0,0,0,5,2,3,0,7,7
+Czechia,0,0,0,0,13,0,0,13,13
+Dominican Republic,0,0,0,9,0,9,0,9,9
+El Salvador,0,0,0,1,3,-2,0,4,4
+Equatorial Guinea,0,0,0,7,0,7,0,7,7
+Fiji,0,0,0,10,0,10,0,10,10
+Georgia,0,0,0,5,0,5,0,5,5
+Greece,0,0,0,10,0,10,0,10,10
+Guinea,0,0,0,6,0,6,0,6,6
+Guyana,0,0,0,6,0,6,0,6,6
+Haiti,0,0,0,7,0,7,0,7,7
+Honduras,0,0,0,2,5,-3,0,7,7
+ILO,0,0,0,0,5,0,0,5,5
+Islamic Republic of Iran,0,0,0,7,0,7,0,7,7
+Lao People’s Democratic Republic,0,0,0,4,0,4,0,4,4
+Libya,0,0,0,8,0,8,0,8,8
+Liechtenstein,0,0,0,5,13,-8,0,18,18
+Luxembourg,0,0,0,6,5,1,0,11,11
+Madagascar,0,0,0,7,0,7,0,7,7
+Malta,0,0,0,3,0,3,0,3,3
+Montenegro,0,0,0,2,0,2,0,2,2
+Peru,0,0,0,13,0,13,0,13,13
+Philippines,0,0,0,8,4,4,0,12,12
+Plurinational State of Bolivia,0,0,0,8,0,8,0,8,8
+the Paris Principles,0,0,0,0,4,0,0,4,4
+United Republic of Tanzania,0,0,0,6,0,6,0,6,6
+NA,0,0,0,7,0,7,0,7,7
