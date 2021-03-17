@@ -30,13 +30,13 @@ for (i in filenames) {
   text_df <- tibble(text = s)
   word_tokens_df <- unnest_tokens(text_df, word_tokens,  text, token = "words")
   df <- anti_join(word_tokens_df, stop_words, by = c("word_tokens" = "word"))
-  
+
   df$word_tokens <- removeNumbers(df$word_tokens)
   df$word_tokens <-  removePunctuation(df$word_tokens)
   df <- df %>% filter(word_tokens != "")
-  
+
   for (s in c("nrc", "afinn", "bing")) {
-    df <- df %>% 
+    df <- df %>%
       left_join(get_sentiments(s), by = c("word_tokens" = "word")) %>%
       plyr::rename(replace = c(sentiment = s, value = s), warn_missing = FALSE)
   }
@@ -46,7 +46,7 @@ for (i in filenames) {
 names(sentiment_list) <- c("Comments About China in 2013", "Comments About China in 2018") # Define names of df's
 
 
-##using sentiment list in the function in order to allow for automatic title changing 
+##using sentiment list in the function in order to allow for automatic title changing
 
 plot <- function(df){
     ggplot(data = sentiment_list[[df]] %>% filter(!is.na(bing))) +
@@ -86,12 +86,12 @@ s <- read_file(i)
 text_df <- tibble(text = s)
 df_udp <- udpipe(text_df$text, "english")
 
-test_lemmas <- df_udp %>% 
-  filter(upos != "PUNCT") %>% 
+test_lemmas <- df_udp %>%
+  filter(upos != "PUNCT") %>%
   anti_join(stop_words, by = c("lemma" = "word"))
 
 test_lemmas$lemma <- removeNumbers(test_lemmas$lemma)
-test_lemmas$lemma <- removePunctuation(test_lemmas$lemma) 
+test_lemmas$lemma <- removePunctuation(test_lemmas$lemma)
 test_lemma <- test_lemmas %>% select(token, lemma)
 
 lemma_list <- append(lemma_list, list(test_lemma))
@@ -126,55 +126,55 @@ for (i in filenames_docs){
   s <- docx_extract_all_tbls(s)
   s <- as_tibble(s[[1]])
   s$Assessment.comments.on.level.of.implementation <- NULL
-  
+
   ##removing all rows which start with "theme"
-  
-  s <- s %>% 
+
+  s <- s %>%
     filter(!str_detect(Recommendation, 'Theme:'))
-  
+
   ##splitting off first codes
   y <-  colsplit(s$Recommendation," ",c("code","recommendations"))
-  
+
   ##binding back together
   s <- cbind(s, y)
-  
+
   ##dropping original column
   s$Recommendation <- NULL
-  
+
   ##use regex to remove ending redundant information from recommendations
   ##Source: https://r4ds.had.co.nz/strings.html
   s$recommendations <- str_extract(s$recommendations, "(.*);")
-  
+
   ##separating country comments
   s <- separate(s, col = recommendations, into = c("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"), sep = ";", remove = FALSE)
-  
+
   ##replacing empty strings with NA
   s[s==""]<-NA
   s$recommendations <- NULL
-  
+
   s <- s %>% pivot_longer(cols = a:k, values_to = "recommendations", values_drop_na = TRUE)
-  
+
   s$name <- NULL
-  
+
   ##removing ()
   s$country <- str_extract(s$recommendations, "(?<=\\().+?(?=\\))")
   s$recommendations <- str_remove(s$recommendations, "\\([^()]*\\)")
-  
+
   ##cleaning theme column and separating
   s <- separate(s, col = Full.list.of.themes, into = c("a", "b", "c", "d", "e", "f", "g", "h"), sep = "(?<=.)(?=[a-zA-Z]\\d{1,2})", remove = TRUE)
   s <- s %>% pivot_longer(cols = a:h, values_to = "themes", values_drop_na = TRUE)
-  
+
   s[s==""]<-NA
   s$name <- NULL
-  
+
   ##saving a list of themes
   theme_list <- unique(s$themes)
   theme_list <- as_tibble(theme_list)
-  
+
   s <- separate(s, col = themes, into = c("theme_code", "description"), sep = "\\s|\\-", extra = "merge", remove = TRUE)
-  
+
   names(s) <- tolower(names(s))
-  
+
   text_cleaning_list <- append(text_cleaning_list, list(s))
 }
 
@@ -194,51 +194,50 @@ for (i in filenames_docs){
   s <- docx_extract_all_tbls(s)
   s <- as_tibble(s[[1]])
   s$Assessment.comments.on.level.of.implementation <- NULL
-  
+
   ##removing all rows which start with "theme"
-  
-  s <- s %>% 
+
+  s <- s %>%
     filter(!str_detect(Recommendation, 'Theme:'))
-  
+
   ##splitting off first codes
   y <-  colsplit(s$Recommendation," ",c("code","recommendations"))
-  
+
   ##binding back together
   s <- cbind(s, y)
-  
+
   ##dropping original column
   s$Recommendation <- NULL
-  
+
   ##use regex to remove ending redundant information from recommendations
   ##Source: https://r4ds.had.co.nz/strings.html
   s$recommendations <- str_extract(s$recommendations, "(.*);")
-  
+
   ##separating country comments
   s <- separate(s, col = recommendations, into = c("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"), sep = ";", remove = FALSE)
-  
+
   ##replacing empty strings with NA
   s[s==""]<-NA
   s$recommendations <- NULL
-  
+
   s <- s %>% pivot_longer(cols = a:k, values_to = "recommendations", values_drop_na = TRUE)
-  
+
   s$name <- NULL
-  
+
   ##removing ()
   s$country <- str_extract(s$recommendations, "(?<=\\().+?(?=\\))")
   s$recommendations <- str_remove(s$recommendations, "\\([^()]*\\)")
-  
+
   ##cleaning theme column and separating
   s <- separate(s, col = Full.list.of.themes, into = c("a", "b", "c", "d", "e", "f", "g", "h"), sep = "(?<=.)(?=[a-zA-Z]\\d{2})", remove = TRUE)
   s <- s %>% pivot_longer(cols = a:h, values_to = "themes", values_drop_na = TRUE)
-  
-  
-  
+
+
+
   s[s==""]<-NA
   s$name <- NULL
-  
+
   text_cleaning_list <- append(text_cleaning_list, list(s))
 }
 
 names(text_cleaning_list) <- filenames_docs  # Define names of df's
-
