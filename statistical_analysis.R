@@ -170,7 +170,7 @@ recs_df <- long_join %>%
          Year, ChinaDebt_GDP, GDP_USDbn, values, time_dummy, variable, distance, total_debt_GDP, foreign_debt_gdp, GDP_percapita) %>%
   filter(variable == "total_recs")
 
-recs_long %>%
+recs_df %>%
   drop_na(values) %>%
   ggplot(aes(x = log(ChinaDebt_GDP+1), y = values)) +
   geom_point(aes(color = factor(Year))) +
