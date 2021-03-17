@@ -81,6 +81,8 @@ ggplotly(plot_2)
 #  select(country, distance)
 
 ### trade data
+## we got it from https://comtrade.un.org/data/dev/portal
+
 
 comtrade <- rbind(read.csv("comtrade_2018.csv"), read.csv("comtrade_2013.csv"),
                   read.csv("comtrade_2008.csv"), read.csv("comtrade_2003.csv"))
