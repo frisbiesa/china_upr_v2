@@ -2,11 +2,13 @@
 title: Chinese Debt and Political Influence As measured through Country Recommendations in the UN Universal Periodic Review
 subtitle: PPHA 30536 Data And Programming For Public Policy II Winter 2021, Final Project
 author: Andrés Fortunato & Sonnet Frisbie
-output: 
+output: html_document
+runtime: shiny
   html_notebook: 
     fig_width: 10
     fig_height: 6
-runtime: shiny
+editor_options: 
+  chunk_output_type: inline
 ---
 
 ```{r setup, include=FALSE}
