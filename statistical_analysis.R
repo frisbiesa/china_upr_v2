@@ -14,10 +14,21 @@ debt_database <- debt_database %>% select(1:7)
 
 ##-------------------------------------basic stats visualizations and HP_test ----------------------------------------------------
 
+##boxplot by year
+debt_database %>%
+  ggplot(aes(x=Year, y = ChinaDebt_GDP, na.rm = TRUE)) +
+  geom_boxplot(aes(group = Year))
+
+quantiles <- debt_database %>%
+  group_by(Year) %>%
+  summarise(year_mean = mean(ChinaDebt_GDP, na.rm = TRUE),
+            year_median = median(ChinaDebt_GDP, na.rm = TRUE),
+            quantile_25 = quantile(ChinaDebt_GDP, 0.25),
+            quantile_75 = quantile(ChinaDebt_GDP, 0.75))
 ## https://www.rdocumentation.org/packages/mFilter/versions/0.1-5/topics/hpfilter
 ##Hodrick-Prescott filter to see trend and cycle of debt to GDP owed to China
 
-hp <- debt_database %>% select(Year, year_mean) %>% head(18) 
+hp <- quantiles %>% select(Year, year_mean) %>% head(18) 
 debt_hp <- hpfilter(hp$year_mean, type = c("lambda"), freq = 1)
 objectList <- list(debt_hp$x,debt_hp$trend,debt_hp$cycle)
 hp <- as.data.frame(do.call(cbind, objectList))
@@ -37,17 +48,7 @@ hp %>%
 ## Using boxplot and quantiles to look at the skew of the explanatory variable
 ## this shows there is a lot of positive skewness, so we will log the ChinaDebt_GDP variable
 
-##boxplot by year
-debt_database %>%
-  ggplot(aes(x=Year, y = ChinaDebt_GDP, na.rm = TRUE)) +
-  geom_boxplot(aes(group = Year))
 
-quantiles <- debt_database %>%
-  group_by(Year) %>%
-  summarise(year_mean = mean(ChinaDebt_GDP, na.rm = TRUE),
-            year_median = median(ChinaDebt_GDP, na.rm = TRUE),
-            quantile_25 = quantile(ChinaDebt_GDP, 0.25),
-            quantile_75 = quantile(ChinaDebt_GDP, 0.75))
 
 print(quantiles)
 
