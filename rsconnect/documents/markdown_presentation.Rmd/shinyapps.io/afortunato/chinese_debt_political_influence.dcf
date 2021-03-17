@@ -5,8 +5,8 @@ account: afortunato
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 3808813
-bundleId: 4359489
+bundleId: 4359690
 url: https://afortunato.shinyapps.io/chinese_debt_political_influence/
-when: 1615999908.85335
+when: 1616003073.02166
 asMultiple: FALSE
 asStatic: FALSE
