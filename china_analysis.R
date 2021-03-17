@@ -19,12 +19,12 @@ clean_2018 <- read_csv("text_cleaning_list_2018.csv")
 
 get_support_scores <- function(x){
   country_support_score <- x %>% 
-    group_by(country, Position) %>%
+    group_by(country, position) %>%
     summarise(n = n())
   
   country_support_score <-
     country_support_score %>%
-    pivot_wider(names_from = Position, values_from = n) %>%
+    pivot_wider(names_from = position, values_from = n) %>%
     replace_na(list(Noted = 0)) %>%
     mutate(support_score = Supported-Noted)
 }
@@ -34,7 +34,6 @@ get_support_scores <- function(x){
 ##that country was easier on China in 2018 than 2013.  A negative score will mean the opposite.  Since
 ##all numbers are relative, magnitude of numbers of comments shouldnt matter. 
 
-##make this into loop
 support_score_2013 <- get_support_scores(clean_2013)
 support_score_2018 <- get_support_scores(clean_2018)
 

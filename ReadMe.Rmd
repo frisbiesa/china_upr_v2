@@ -1,0 +1,53 @@
+---
+title: "ReadMe"
+output: html_document
+runtime: shiny
+---
+
+```{r setup, include=FALSE, echo = FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+library(tidyverse)
+library(tidytext)
+library(docxtractr)
+library(textdata)
+library(gridExtra)
+library(tm)
+library(SnowballC)
+library(wordcloud)
+library(RColorBrewer)
+library(rvest)
+library(purrr)
+library(readr)
+library(reshape2)
+library(rlist)
+library(varhandle)
+library(udpipe)
+library(shiny)
+library(shinyWidgets)
+
+```
+
+
+#Data And Programming
+#For Public Policy II
+#Final Project
+
+##PPHA 30536 - Winter 2021
+
+###Chinese Debt and Political Influence
+###As measured through Country Recommendations
+###in the UN Universal Periodic Review
+
+####Andres Fortunato
+####Sonnet Frisbie
+
+
+## Data Wrangling
+
+For our primary dataset on Chinese debt, we used a dataset assembled by Horn, Reinhardt and Trebesch.  Fortunately, this dataset was exceedingly clean and well-documented.  Conversely, for our dependent variable in our analysis, we created a brand new dataset using text analysis and regex expressions of the matrices of recommendations from the UN Universal Periodic Reviews of China for 2013 and 2018.  This was an extensive data cleaning task involving large amounts of regex, reshaping, string, manipulation, and joining.  You can find all of this in the text_analysis.R file in our repo.  
+
+##Plotting
+
+
+
