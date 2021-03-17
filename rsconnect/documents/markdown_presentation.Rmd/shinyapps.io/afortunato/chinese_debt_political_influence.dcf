@@ -1,0 +1,12 @@
+name: chinese_debt_political_influence
+title: chinese_debt_political_influence
+username:
+account: afortunato
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 3808813
+bundleId: 4359489
+url: https://afortunato.shinyapps.io/chinese_debt_political_influence/
+when: 1615999908.85335
+asMultiple: FALSE
+asStatic: FALSE

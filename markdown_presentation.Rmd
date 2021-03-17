@@ -2,47 +2,22 @@
 title: Chinese Debt and Political Influence As measured through Country Recommendations in the UN Universal Periodic Review
 subtitle: PPHA 30536 Data And Programming For Public Policy II Winter 2021, Final Project
 author: Andrés Fortunato & Sonnet Frisbie
-output: html_document
-runtime: shiny
-  html_notebook: 
+output: html_document 
+html_notebook:
     fig_width: 10
     fig_height: 6
-editor_options: 
-  chunk_output_type: inline
 ---
 
 ```{r setup, include=FALSE}
-library(png)
 library(tidyverse)
 library(countrycode)
-library(gapminder)
-library(stargazer)
-library(WDI)
 library(plotly)
 library(shiny)
 library(sf)
 library(spData)
-library(ggpubr)
-library(RColorBrewer)
-library(purrr)
-library(readr)
-library(reshape2)
-library(rlist)
-library(varhandle)
-library(forcats)
-library(treemap)
-library(d3treeR)
-library(htmlwidgets)
 library(tidytext)
-library(docxtractr)
-library(textdata)
-library(gridExtra)
 library(tm)
-library(SnowballC)
-library(wordcloud)
-library(rvest)
-library(udpipe)
-library(knitr)
+library(rsconnect)
 ```
 
 
@@ -76,8 +51,7 @@ plot_1 <- debt %>%
   theme_minimal() +
   labs(title = "Evolution of chinese finance per continent (2000-2017)",
        x = "", y = "Millions of USD", color = "Continent", caption = "Source: Horn, Sebastian, Carmen M. Reinhart, and Christoph Trebesch. 2019. 'China's Overseas Lending.' NBER Working Paper No. 26050.") +
-  theme(legend.position = "none", 
-        plot.title = element_text(face = "bold", family = "serif", size = 24))
+  theme(legend.position = "none")
 
 ggplotly(plot_1)
 ```
@@ -99,8 +73,7 @@ plot_2 <- debt %>%
   theme_minimal() +
   labs(title = "Growth rate of total investments from China", y = "Growth Rate (%)", x = "",
        caption = "Source: Horn, Sebastian, Carmen M. Reinhart, and Christoph Trebesch. 2019. 'China's Overseas Lending.' NBER Working Paper No. 26050.") +
-  theme(legend.position = "none", 
-        plot.title = element_text(face = "bold", family = "serif", size = 24))
+  theme(legend.position = "none")
 
 ggplotly(plot_2)
 ```
@@ -141,87 +114,7 @@ plot_3 <- trade_debt %>%
 ggplotly(plot_3)
 ```
 
-In the following map, we can observe the geographical evolution of both trade and debt to China:
-
-
-```{r echo=FALSE, warning=FALSE}
-debt <- debt %>% 
-  select(-country_code, -ISO)
-worlde <- world %>% 
-  rename(country = name_long)
-mapamundi <- left_join(worlde, debt, by = "country") %>% 
-  left_join(comtrade_china_total, by = c("country", "year"))
-```
-
-```{r echo=FALSE, warning=FALSE, message=FALSE}
-shinyApp(
-ui <- fluidPage(
-  fluidRow(
-    column(width = 12,
-           align = "center",
-           tags$h1("Financial and trade flows with China in the developing world", 
-                   tags$style('head { face: bold }'))
-    )
-  ), 
-  fluidRow(
-    column(width = 12,
-           align = "center",
-           sidebarLayout(
-             sidebarPanel(
-               selectInput(inputId = "variable",
-                           label = "Select a variable to visualize",
-                           choices = c("Debt to china as percentage of GDP", 
-                                       "Imports from China", 
-                                       "Exports to China")),
-               sliderInput(inputId = "date", 
-                           label = "Date:", 
-                           min = 2000, 
-                           max = 2017, 
-                           value = 2017)),
-             mainPanel(
-               plotOutput("map", 
-                          width = "100%")
-             ), fluid = TRUE
-           )
-    )
-  )
-),
-
-server <- function(input, output) {
-  
-  data <- reactive({
-    mapamundi %>% 
-      filter(year == input$date) 
-  })
-
-  output$map <- renderPlot({
-    ggplot() +
-      geom_sf(data = world) +
-      geom_sf(data = data(), aes(fill = { if (input$variable == "Debt to china as percentage of GDP") {
-        china_debt_gdp 
-      } else if (input$variable == "Imports from China") {
-        Export
-      } else if (input$variable == "Exports to China") {
-        Import
-      }}), alpha = 3/5) +
-      labs(title = "", 
-           fill = "",
-           caption = "Source: COMTRADE data and Horn et al. 2019") +
-      theme_minimal() +
-      theme(axis.text.x = element_blank(), 
-            axis.text.y = element_blank(),
-            plot.caption = element_text(size = 12)) +
-      guides(color = FALSE, 
-             alpha = FALSE,
-             fill = guide_colorbar(barwidth = 0.5, 
-                                   barheight = 10, title.position = "left",
-                                   title.theme = element_text(angle = 90),
-                                   title.hjust = .5))
-   
-  },height = 600, width = 600)
-  }
-)
-```
+[Here]("https://afortunato.shinyapps.io/frisbie_fortu_china_map/") we can observe the geographical evolution of both trade and debt to China.
 
 But what is the composition of Chinese finance? In the following interactive chart, we can observe the total amount of USD commited in development projects per type:
 
@@ -241,7 +134,7 @@ finance_tree <- finance_tree %>%
   select(-total)
 ```
 
-```{r echo=FALSE, warning=FALSE}
+```{r echo=FALSE, warning=FALSE, fig.width=12}
 plot_4 <- finance %>% 
   group_by(crs_sector_name) %>% 
   summarise(total = sum(usd_defl_2014, na.rm = TRUE)) %>% 
