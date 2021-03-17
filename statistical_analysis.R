@@ -10,9 +10,10 @@ setwd ("~/Desktop/Desktop - MacBook Pro/Data and Programming II/final project/Fo
 joint_support_scores <- read_csv("joint_support_scores.csv")
 debt_database <- read_csv("HRT_ChinaDebtStockDatabase.csv", col_names = TRUE)
 debt_database <- debt_database %>% select(1:7)
-
+controls <- read_csv("controls.csv")
 
 ##-------------------------------------basic stats visualizations and HP_test ----------------------------------------------------
+
 
 ##boxplot by year
 debt_database %>%
@@ -25,6 +26,13 @@ quantiles <- debt_database %>%
             year_median = median(ChinaDebt_GDP, na.rm = TRUE),
             quantile_25 = quantile(ChinaDebt_GDP, 0.25),
             quantile_75 = quantile(ChinaDebt_GDP, 0.75))
+
+
+## Using boxplot and quantiles to look at the skew of the explanatory variable
+## this shows there is a lot of positive skewness, so we will log the ChinaDebt_GDP variable
+
+print(quantiles)
+
 ## https://www.rdocumentation.org/packages/mFilter/versions/0.1-5/topics/hpfilter
 ##Hodrick-Prescott filter to see trend and cycle of debt to GDP owed to China
 
@@ -44,13 +52,6 @@ hp %>%
 
 ## Note: The trend is very pronounced and seems to swamp out a lot of other variation.
 ## this will likely cause issues in our regressions as we will see below.  
-
-## Using boxplot and quantiles to look at the skew of the explanatory variable
-## this shows there is a lot of positive skewness, so we will log the ChinaDebt_GDP variable
-
-
-
-print(quantiles)
 
 
 ##-------------------------------Changing data into long format, joining --------------------------
@@ -84,21 +85,6 @@ debt_subset <- debt_subset %>% left_join(distance_china, by = c("Country" = "cou
 
 ##correcting a matching error
 debt_subset$distance[debt_subset$Country == "Cote d'Ivoire"] <- 11255
-
-##loading in other controls 
-
-devecon <- read_csv("/Users/sonnetfrisbie/Desktop/Desktop - MacBook Pro/ISDC/R working directory ISDC/DEVECON_fulldataset.csv")
-
-#EIU_TDBT: Total_foreign_debt_[Y]
-#EIU_TDPY: Total_debt/GDP_[Y]
-#WB_ny_gdp_pcap_cd: GDP per capita (current US$)
-
-controls <- devecon %>% 
-  select(iso, year, EIU_TDBT, EIU_TDPY, WB_ny_gdp_pcap_cd) %>% 
-  filter(year == 2012|year == 2017) %>%
-  rename("total_foreign_debt" = "EIU_TDBT", 
-         "total_debt_GDP" = "EIU_TDPY",
-         "GDP_percapita" = "WB_ny_gdp_pcap_cd")
 
 debt_subset <- debt_subset %>% left_join(controls, by = c("ISO" = "iso", "Year" = "year"))
 
