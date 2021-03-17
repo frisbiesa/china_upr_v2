@@ -132,7 +132,8 @@ plot_3 <- trade_debt %>%
   geom_line(aes(year, total, color = continent), stat = "identity") +
   theme_minimal() +
   labs(title = "Evolution of chinese trade per continent (2000-2017)",
-       x = "", y = "Total in USD", color = "Continent") 
+       x = "", y = "Total in USD", color = "Continent", 
+       caption = "Source: Horn et al., 2019") 
 ggplotly(plot_3)
 ```
 
@@ -201,7 +202,7 @@ server <- function(input, output) {
       }}), alpha = 3/5) +
       labs(title = "", 
            fill = "",
-           caption = "Source: sonnet") +
+           caption = "Source: COMTRADE data and Horn et al. 2019") +
       theme_minimal() +
       theme(axis.text.x = element_blank(), 
             axis.text.y = element_blank(),
@@ -242,7 +243,8 @@ plot_4 <- finance %>%
   summarise(total = sum(usd_defl_2014, na.rm = TRUE)) %>% 
   ggplot() +
   geom_bar(aes(total, fct_reorder(crs_sector_name, total), fill = total), stat = "identity") +
-  labs(title = "Total USD commited in development projects per sector", x = "USD deflated to 2014", y = "") +
+  labs(title = "Total USD commited in development projects per sector", x = "USD deflated to 2014", y = "", 
+       caption = "Source: aiddata.org") +
   theme_minimal()
 
 ggplotly(plot_4)
@@ -255,7 +257,7 @@ ggplotly(ggplot(finance_tree) +
                          geom_bar(aes(pct_region, crs_sector_name, fill = recipient_region), 
                                   stat= "identity", position = "fill") +
                          labs(title = "Chinese development finance per type and continent",
-                              y = "", x = "Total", fill = "Region") +
+                              y = "", x = "Total", fill = "Region", caption = "Source: aiddata.org") +
                          theme_minimal() +
                          theme(title = element_text(face = "bold"),
                                legend.position = "bottom"))
@@ -336,9 +338,6 @@ Namely, in pulling data from the text, we decided to use information on whether 
 
 As an interesting side-project, we analyzed which categories of recommendations were most likely to be rejected or accepted by China and depicted them in an interactive tree-graph with a D3 interface within R.  You can find this in the repo as interactiveTreemap.html (and you can see the code behind it in china_analysis.R).  
 
-```{r}
-
-```
 
 ## Statistical Analysis
 
