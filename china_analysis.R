@@ -50,7 +50,7 @@ joint_support_scores <- joint_support_scores %>%
 
 ##writing to use later in regression
 
-#write_csv(joint_support_scores, "joint_support_scores.csv")
+write_csv(joint_support_scores, "joint_support_scores.csv")
 
 joint_support_scores <- joint_support_scores %>% 
   mutate(diff_support_score = support_score_18-support_score_13) %>%
@@ -79,9 +79,6 @@ joint_support_scores %>%
 
 ##---------------------------------------------------------------
 
-clean_2013
-
-unique(clean_2013$theme_code)
 
 require(data.table)
 
@@ -89,7 +86,7 @@ theme_response <- clean_2013 %>%
   group_by(position, theme_code, description) %>%
   summarise(n = n()) %>%
   group_by(position) %>%
-  arrange(desc(n))
+  arrange(desc(n)) 
 
 
 
@@ -114,14 +111,14 @@ theme_response_subset %>%
 ##-----------------------------trying a treemap instead---------------------------------
 
 theme_response_tree <- data.table(theme_response, key="n")
-theme_response_tree <- theme_response_tree[, tail(.SD, 15), by=position]    
+theme_response_tree <- theme_response_tree[, tail(.SD, 15), by=Position]    
 
 theme_response_tree$description <- gsub("\\-.*","",theme_response_tree$description)
 
 theme_response_tree[29,3] <- "Equality and non-Discrimination"
 
 p <- treemap(dtf = theme_response_tree, 
-        index = c("position", "description"), 
+        index = c("Position", "description"), 
         vSize = "n", 
         type = "index",
         palette = "Set1",
@@ -139,7 +136,7 @@ dev.copy(png,'static_tree_map')
 dev.off()
 
 test_d3_tree <- d3tree2(p,  rootname = "Themes by Support Status" )
-test_d3_tree
+
 ##saving my html widget
 
 saveWidget(test_d3_tree, file=paste0(getwd(), "/interactiveTreemap.html"))
