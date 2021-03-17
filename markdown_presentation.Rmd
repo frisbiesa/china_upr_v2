@@ -8,7 +8,7 @@ runtime: shiny
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+
 
 library(tidyverse)
 library(countrycode)
@@ -19,11 +19,31 @@ library(plotly)
 library(shiny)
 library(sf)
 library(spData)
+library(ggpubr)
+library(RColorBrewer)
+library(purrr)
+library(readr)
+library(reshape2)
+library(rlist)
+library(varhandle)
+library(forcats)
+library(treemap)
+library(d3treeR)
+library(htmlwidgets)
+library(tidytext)
+library(docxtractr)
+library(textdata)
+library(gridExtra)
+library(tm)
+library(SnowballC)
+library(wordcloud)
+library(rvest)
+library(udpipe)
 ```
 
 ## Data
 
-```{r echo=FALSE, warning=FALSE}
+```{r echo=FALSE, warning=FALSE, message=FALSE}
 c_f <- read.csv("chinese_finance.csv")
 c_pd <- read.csv("chinese_public_diplo.csv")
 debt <- read.csv("debt_stock_china.csv")
@@ -81,7 +101,7 @@ ggplotly(plot_2)
 
 At the same time, it is worth noting that the chinese investment in Africa stands out when we consider China's trade evolution through time. Naturally, the region in which China trades most is Asia. 
 
-```{r echo=FALSE, warning=FALSE}
+```{r echo=FALSE, warning=FALSE, message=FALSE}
 comtrade <- rbind(read.csv("comtrade_2018.csv"), read.csv("comtrade_2013.csv"), 
                   read.csv("comtrade_2008.csv"), read.csv("comtrade_2003.csv"))
 
@@ -126,7 +146,7 @@ mapamundi <- left_join(worlde, debt, by = "country") %>%
   left_join(comtrade_china_total, by = c("country", "year"))
 ```
 
-```{r echo=FALSE, warning=FALSE}
+```{r echo=FALSE, warning=FALSE, message=FALSE}
 shinyApp(
 ui <- fluidPage(
   fluidRow(
@@ -198,7 +218,7 @@ server <- function(input, output) {
 
 But what is the composition of Chinese finance? In the following interactive chart, we can observe the total amount of USD commited in development projects per type:
 
-```{r echo=FALSE, warning=FALSE}
+```{r echo=FALSE, warning=FALSE, message=FALSE}
 finance <- read.csv("chinese_finance.csv")
 
 finance$usd_defl_2014 <- str_remove_all(finance$usd_defl_2014, ",")
@@ -244,9 +264,70 @@ ggplotly(ggplot(finance_tree) +
 
 The text analysis here can be divided into two parts.  One, as mentioned above, relates to creating a dataframe out of analysis of word documents and breaking a word table into its constituent parts.  The other part consisted of text sentiment analysis of the two years of recommendations.  Using techniques learned in class (lemmatization, a word cloud, bag of words, and basic sentiment analysis) we were able to see that the tone of the documents changed from 2013 to 2018 to be more positive.  This guided the rest of our research.
 
-```{r}
+In 2013, negative comments clearly dominate the discourse:
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+filenames <- c("Matrix_recommendations_2013.txt", "Matrix_recommendations_2018.txt")
+
+sentiment_list <- list()
+
+for (i in filenames) {
+  s <- read_file(i)
+  text_df <- tibble(text = s)
+  word_tokens_df <- unnest_tokens(text_df, word_tokens,  text, token = "words")
+  df <- anti_join(word_tokens_df, stop_words, by = c("word_tokens" = "word"))
+
+  df$word_tokens <- removeNumbers(df$word_tokens)
+  df$word_tokens <-  removePunctuation(df$word_tokens)
+  df <- df %>% filter(word_tokens != "")
+
+  for (s in c("nrc", "afinn", "bing")) {
+    df <- df %>%
+      left_join(get_sentiments(s), by = c("word_tokens" = "word")) %>%
+      plyr::rename(replace = c(sentiment = s, value = s), warn_missing = FALSE)
+  }
+  sentiment_list <- append(sentiment_list, list(df))
+}
+
+names(sentiment_list) <- c("comments_china_2013", "comments_china_2018") # Define names of df's
+
+list2env(sentiment_list,.GlobalEnv)
+
+plot_5 <- comments_china_2013 %>% 
+  filter(!is.na(bing)) %>% 
+  ggplot()  +
+    geom_histogram(aes(bing, fill = bing), stat = "count") +
+    scale_x_discrete(guide= guide_axis(angle = 45)) +
+    labs(title = "Comments about China in 2013") +
+    theme_minimal() +
+    theme(legend.title = element_blank(),
+          axis.title.x = element_blank()) +
+    theme(plot.title = element_text(size = 20, face = "bold"),
+          axis.text=element_text(size=12),
+          axis.title=element_text(size=14,face="bold"))
+
+ggplotly(plot_5)
+```
 
 
+But in 2018, this changed dramatically:
+
+```{r echo=FALSE, warning=FALSE}
+plot_6 <- comments_china_2018 %>% 
+  filter(!is.na(bing)) %>% 
+  ggplot()  +
+    geom_histogram(aes(bing, fill = bing), stat = "count") +
+    scale_x_discrete(guide= guide_axis(angle = 45)) +
+    labs(title = "Comments about China in 2018") +
+    theme_minimal() +
+    theme(legend.title = element_blank(),
+          axis.title.x = element_blank()) +
+    theme(plot.title = element_text(size = 20, face = "bold"),
+          axis.text=element_text(size=12),
+          axis.title=element_text(size=14,face="bold"))
+
+ggplotly(plot_6)
 ```
 
 Namely, in pulling data from the text, we decided to use information on whether China had accepted or rejected a particular recommendation as a proxy for the recommending country’s political attitudes towards China.  We created variables for each country’s positive and negative comments in each of the two reviews, and also an overall “support score” based on the difference of these two fields.  This dataframe was created in China_analysis.R.  We used this document throughout the rest of the project.  
