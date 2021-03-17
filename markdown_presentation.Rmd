@@ -1,0 +1,360 @@
+---
+title: Chinese Debt and Political Influence As measured through Country Recommendations in the UN Universal Periodic Review
+output: 
+  html_notebook: 
+    fig_width: 10
+    fig_height: 6
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+
+
+library(tidyverse)
+library(countrycode)
+library(gapminder)
+library(stargazer)
+library(WDI)
+library(plotly)
+library(shiny)
+library(sf)
+library(spData)
+library(ggpubr)
+library(RColorBrewer)
+library(purrr)
+library(readr)
+library(reshape2)
+library(rlist)
+library(varhandle)
+library(forcats)
+library(treemap)
+library(d3treeR)
+library(htmlwidgets)
+library(tidytext)
+library(docxtractr)
+library(textdata)
+library(gridExtra)
+library(tm)
+library(SnowballC)
+library(wordcloud)
+library(rvest)
+library(udpipe)
+```
+
+## Data
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+c_f <- read.csv("chinese_finance.csv")
+c_pd <- read.csv("chinese_public_diplo.csv")
+debt <- read.csv("debt_stock_china.csv")
+
+debt$debt_usd <- str_remove_all(debt$debt_usd, ",")
+debt$debt_usd <- as.integer(debt$debt_usd)
+
+debt$continent <- countrycode(sourcevar = debt$country,
+                                 origin = "country.name",
+                                 destination = "continent")
+```
+
+For our primary dataset on Chinese debt, we used a dataset assembled by Horn, Reinhardt and Trebesch.  Fortunately, this dataset was exceedingly clean and well-documented.  Conversely, for our dependent variable in our analysis, we created a brand new dataset using text analysis and regex expressions of the matrices of recommendations from the UN Universal Periodic Reviews of China for 2013 and 2018.  This was an extensive data cleaning task involving large amounts of regex, reshaping, string, manipulation, and joining.  You can find all of this in the text_analysis.R file in our repo.  
+
+As an exploration of how chinese development finance evolved through time, we can look at the following graph. We see that initially Asia was the main recipient of chinese finance, but Africa took off after 2008. 
+
+```{r echo=FALSE, warning=FALSE}
+plot_1 <- debt %>%
+  group_by(year, continent) %>%
+  summarise(total = sum(debt_usd, na.rm = TRUE)/1000000) %>% 
+  ggplot() +
+  geom_point(aes(year, total, color = continent), stat = "identity") +
+  geom_line(aes(year, total, color = continent), stat = "identity") +
+  theme_minimal() +
+  labs(title = "Evolution of chinese finance per continent (2000-2017)",
+       x = "", y = "Millions of USD", color = "Continent", caption = "Source: Horn, Sebastian, Carmen M. Reinhart, and Christoph Trebesch. 2019. 'China's Overseas Lending.' NBER Working Paper No. 26050.") +
+  theme(legend.position = "none", 
+        plot.title = element_text(face = "bold", family = "serif", size = 24))
+
+ggplotly(plot_1)
+```
+
+Overall, the global debt to chine has been rising in the past 15 years. Nonetheless, its average growth rate has slowed down dramatically:
+
+```{r echo=FALSE, warning=FALSE}
+
+plot_2 <- debt %>%
+  group_by(year) %>%
+  summarise(total = sum(debt_usd, na.rm = TRUE)) %>% 
+  arrange(year) %>%
+  mutate(diff_year = year - lag(year),  
+         diff_growth = total - lag(total), 
+         growth_rate = (diff_growth / diff_year)/lag(total) * 100) %>% 
+  ggplot() +
+  geom_point(aes(year, growth_rate), color = "brown", size = 1.5, stat = "identity") +
+  geom_line(aes(year, growth_rate), color = "brown", size = 1, stat = "identity") +
+  theme_minimal() +
+  labs(title = "Growth rate of total investments from China", y = "Growth Rate (%)", x = "",
+       caption = "Source: Horn, Sebastian, Carmen M. Reinhart, and Christoph Trebesch. 2019. 'China's Overseas Lending.' NBER Working Paper No. 26050.") +
+  theme(legend.position = "none", 
+        plot.title = element_text(face = "bold", family = "serif", size = 24))
+
+ggplotly(plot_2)
+```
+
+At the same time, it is worth noting that the chinese investment in Africa stands out when we consider China's trade evolution through time. Naturally, the region in which China trades most is Asia. 
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+comtrade <- rbind(read.csv("comtrade_2018.csv"), read.csv("comtrade_2013.csv"), 
+                  read.csv("comtrade_2008.csv"), read.csv("comtrade_2003.csv"))
+
+comtrade_china_total <- comtrade %>% 
+  select(Year, Trade.Flow, Partner, Partner.ISO, Trade.Value..US..) %>% 
+  rename(year = Year, trade_flow = Trade.Flow, country = Partner, ISO = Partner.ISO, total_usd = Trade.Value..US..) %>%
+  filter(country != "World")
+
+
+trade_debt <- debt %>% 
+  select(ISO, year, china_debt_gdp) %>% 
+  right_join(comtrade_china_total, by = c("year", "ISO"))
+
+trade_debt$continent <- countrycode(sourcevar = trade_debt$country,
+                              origin = "country.name",
+                              destination = "continent")
+```
+
+
+```{r echo=FALSE, warning=FALSE}
+plot_3 <- trade_debt %>% 
+  group_by(continent, year) %>% 
+  summarise(total = sum(total_usd, na.rm = TRUE)) %>% 
+  ggplot() +
+  geom_point(aes(year, total, color = continent), stat = "identity") +
+  geom_line(aes(year, total, color = continent), stat = "identity") +
+  theme_minimal() +
+  labs(title = "Evolution of chinese trade per continent (2000-2017)",
+       x = "", y = "Total in USD", color = "Continent") 
+ggplotly(plot_3)
+```
+
+In the following map, we can observe the geographical evolution of both trade and debt to China:
+
+
+```{r echo=FALSE, warning=FALSE}
+debt <- debt %>% 
+  select(-country_code, -ISO)
+worlde <- world %>% 
+  rename(country = name_long)
+mapamundi <- left_join(worlde, debt, by = "country") %>% 
+  left_join(comtrade_china_total, by = c("country", "year"))
+```
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+shinyApp(
+ui <- fluidPage(
+  fluidRow(
+    column(width = 12,
+           align = "center",
+           tags$h1("Financial and trade flows with China in the developing world", 
+                   tags$style('head { face: bold }'))
+    )
+  ), 
+  fluidRow(
+    column(width = 12,
+           align = "center",
+           sidebarLayout(
+             sidebarPanel(
+               selectInput(inputId = "variable",
+                           label = "Select a variable to visualize",
+                           choices = c("Debt to china as percentage of GDP", 
+                                       "Imports from China", 
+                                       "Exports to China")),
+               sliderInput(inputId = "date", 
+                           label = "Date:", 
+                           min = 2000, 
+                           max = 2017, 
+                           value = 2017)),
+             mainPanel(
+               plotOutput("map", 
+                          width = "100%")
+             ), fluid = TRUE
+           )
+    )
+  )
+),
+
+server <- function(input, output) {
+  
+  data <- reactive({
+    mapamundi %>% 
+      filter(year == input$date) 
+  })
+
+  output$map <- renderPlot({
+    ggplot() +
+      geom_sf(data = world) +
+      geom_sf(data = data(), aes(fill = { if (input$variable == "Debt to china as percentage of GDP") {
+        china_debt_gdp 
+      } else if (input$variable == "Imports from China") {
+        Export
+      } else if (input$variable == "Exports to China") {
+        Import
+      }}), alpha = 3/5) +
+      labs(title = "", 
+           fill = "",
+           caption = "Source: sonnet") +
+      theme_minimal() +
+      theme(axis.text.x = element_blank(), 
+            axis.text.y = element_blank(),
+            plot.caption = element_text(size = 12)) +
+      guides(color = FALSE, 
+             alpha = FALSE,
+             fill = guide_colorbar(barwidth = 0.5, 
+                                   barheight = 10, title.position = "left",
+                                   title.theme = element_text(angle = 90),
+                                   title.hjust = .5))
+   
+  },height = 600, width = 600)
+  }
+)
+```
+
+But what is the composition of Chinese finance? In the following interactive chart, we can observe the total amount of USD commited in development projects per type:
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+finance <- read.csv("chinese_finance.csv")
+
+finance$usd_defl_2014 <- str_remove_all(finance$usd_defl_2014, ",")
+finance$usd_defl_2014 <- as.integer(finance$usd_defl_2014)
+
+finance_tree <- finance %>% 
+  group_by(recipient_region, crs_sector_name) %>% 
+  summarise(total = sum(usd_defl_2014, na.rm = TRUE))
+
+finance_tree <- finance_tree %>% 
+  group_by(crs_sector_name) %>% 
+  mutate(pct_region = total*100/sum(total)) %>% 
+  select(-total)
+```
+
+```{r echo=FALSE, warning=FALSE}
+plot_4 <- finance %>% 
+  group_by(crs_sector_name) %>% 
+  summarise(total = sum(usd_defl_2014, na.rm = TRUE)) %>% 
+  ggplot() +
+  geom_bar(aes(total, fct_reorder(crs_sector_name, total)), stat = "identity") +
+  labs(title = "Total USD commited in development projects per sector", x = "USD deflated to 2014", y = "") +
+  theme_minimal()
+
+ggplotly(plot_4)
+```
+
+At the same time, we can see where are each of the projects going. In this graph, we get a sense of the share of finance each region receives per sector:
+
+```{r echo=FALSE, warning=FALSE, fig.width=12}
+ggplotly(ggplot(finance_tree) +
+                         geom_bar(aes(pct_region, crs_sector_name, fill = recipient_region), 
+                                  stat= "identity", position = "fill") +
+                         labs(title = "Chinese development finance per type and continent",
+                              y = "", x = "Total", fill = "Region") +
+                         theme_minimal() +
+                         theme(title = element_text(face = "bold"),
+                               legend.position = "bottom"))
+
+```
+
+## Text Analysis
+
+The text analysis here can be divided into two parts.  One, as mentioned above, relates to creating a dataframe out of analysis of word documents and breaking a word table into its constituent parts.  The other part consisted of text sentiment analysis of the two years of recommendations.  Using techniques learned in class (lemmatization, a word cloud, bag of words, and basic sentiment analysis) we were able to see that the tone of the documents changed from 2013 to 2018 to be more positive.  This guided the rest of our research.
+
+In 2013, negative comments clearly dominate the discourse:
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+filenames <- c("Matrix_recommendations_2013.txt", "Matrix_recommendations_2018.txt")
+
+sentiment_list <- list()
+
+for (i in filenames) {
+  s <- read_file(i)
+  text_df <- tibble(text = s)
+  word_tokens_df <- unnest_tokens(text_df, word_tokens,  text, token = "words")
+  df <- anti_join(word_tokens_df, stop_words, by = c("word_tokens" = "word"))
+
+  df$word_tokens <- removeNumbers(df$word_tokens)
+  df$word_tokens <-  removePunctuation(df$word_tokens)
+  df <- df %>% filter(word_tokens != "")
+
+  for (s in c("nrc", "afinn", "bing")) {
+    df <- df %>%
+      left_join(get_sentiments(s), by = c("word_tokens" = "word")) %>%
+      plyr::rename(replace = c(sentiment = s, value = s), warn_missing = FALSE)
+  }
+  sentiment_list <- append(sentiment_list, list(df))
+}
+
+names(sentiment_list) <- c("comments_china_2013", "comments_china_2018") # Define names of df's
+
+list2env(sentiment_list,.GlobalEnv)
+
+plot_5 <- comments_china_2013 %>% 
+  filter(!is.na(bing)) %>% 
+  ggplot()  +
+    geom_histogram(aes(bing, fill = bing), stat = "count") +
+    scale_x_discrete(guide= guide_axis(angle = 45)) +
+    labs(title = "Comments about China in 2013") +
+    theme_minimal() +
+    theme(legend.title = element_blank(),
+          axis.title.x = element_blank()) +
+    theme(plot.title = element_text(size = 20, face = "bold"),
+          axis.text=element_text(size=12),
+          axis.title=element_text(size=14,face="bold"))
+
+ggplotly(plot_5)
+```
+
+
+But in 2018, this changed dramatically:
+
+```{r echo=FALSE, warning=FALSE}
+plot_6 <- comments_china_2018 %>% 
+  filter(!is.na(bing)) %>% 
+  ggplot()  +
+    geom_histogram(aes(bing, fill = bing), stat = "count") +
+    scale_x_discrete(guide= guide_axis(angle = 45)) +
+    labs(title = "Comments about China in 2018") +
+    theme_minimal() +
+    theme(legend.title = element_blank(),
+          axis.title.x = element_blank()) +
+    theme(plot.title = element_text(size = 20, face = "bold"),
+          axis.text=element_text(size=12),
+          axis.title=element_text(size=14,face="bold"))
+
+ggplotly(plot_6)
+```
+
+Namely, in pulling data from the text, we decided to use information on whether China had accepted or rejected a particular recommendation as a proxy for the recommending country’s political attitudes towards China.  We created variables for each country’s positive and negative comments in each of the two reviews, and also an overall “support score” based on the difference of these two fields.  This dataframe was created in China_analysis.R.  We used this document throughout the rest of the project.  
+
+As an interesting side-project, we analyzed which categories of recommendations were most likely to be rejected or accepted by China and depicted them in an interactive tree-graph with a D3 interface within R.  You can find this in the repo as interactiveTreemap.html (and you can see the code behind it in china_analysis.R).  
+
+```{r}
+
+```
+
+nalysis
+
+The primary file for this section is statistical_analysis.R.  This stage involved some data transformation in order to get it into a usable “long” format.  We also at this stage imported several more variables from World Development Indicators and the Economist Intelligence unit to use as controls.  
+
+We did some initial analysis to try and understand the relationship between our variables.  For example, we performed a Hodrick-Prescott filter, made a correlation matrix of our x-values, and produced working graphs and a table to look at the distribution of our debt to china variable using quantiles/boxplots per year.  
+
+Initially, we used the “balance” of sentiment from all comments a country made in 2013 and in 2018 as our dependent variable (yit) and ran a normal OLS and then a diff and diff model with the following specifications:
+
+yit =  + treat + time + treat*time + Xi + 
+
+Where time is a dummy variable for whether we are looking in the first UPR (2013) or the second (2018), and treat is a continuous variable of debt to China as percentage of GDP. Note: We used the debt in years 2012 and 2017 since the UPR takes place in January.  Using the lag of this variable also helps address reverse causality concerns.  We ran the diff and diff with country fixed effects in lieu of the control vector, but it removed too much of the variation.  Not only were the results insignificant, but the coefficients were negative (see table 1).  This was not the direction we were expecting, but gave credence to the alternate theory that perhaps countries with higher debt levels simply make fewer comments overall (i.e. the effect is on how many, not the type, of comments).  This could be true if countries were uncertain how a certain comment might be received.  With this in mind, we ran both a simple OLS and a diff and diff regression with the same specification as above, but looking at overall numbers of comments a country made rather than the “support” level of the comments as the dependent variable.  
+
+The OLS was significant at the 5% level across the board, and was robust to including controls for other foreign debt and distance to China (table 2).  In fact, when including all controls, significance raises to the 1% level.   The diff and diff with FE and with controls were insignificant, but the coefficients were negative as expected (table 3).  
+
+This result begs further investigation.  It does appear that there is a clear negative relationship between debt to China and overall fewer comments in China’s UPR (see table 2).  However, unfortunately the UPR is only every 5 years and began in 2009.  The results of the initial 2009 UPR were not captured in a matrix of recommendations like the 2013 and 2018 UPRs were.  By 2013, the trend of Chinese investment was already well advanced globally, so the diff and diff is not able to capture this variation.  For future work, we recommend attempting to pull the 2009 UPR data and format it to include in the study.  We also would recommend including future  UPRs to see if this relationship holds, and if we can use the diff and diff more effectively with more observations to make a causal link.    
+
+##Appendices
+
+Regression Tables
+
