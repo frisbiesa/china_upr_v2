@@ -1,4 +1,10 @@
 # Fortunato-Frisbie-final-project
-Andres Fortunato and Sonnet Frisbie team up to bring you an epic final project
 
-Please see the write-up html file to help you find your way! 
+## PPHA 30536 - Winter 2021
+
+### Chinese Debt and Political Influence
+### As measured through Country Recommendations
+### in the UN Universal Periodic Review
+
+
+***Please see the write-up html file to help you find your way!*** 
