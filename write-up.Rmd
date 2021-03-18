@@ -254,6 +254,6 @@ The OLS was significant at the 5% level across the board, and was robust to incl
 This result begs further investigation.  It does appear that there is a clear negative relationship between debt to China and overall fewer comments in China’s UPR (see table 2).  However, unfortunately the UPR is only every 5 years and began in 2009.  The results of the initial 2009 UPR were not captured in a matrix of recommendations like the 2013 and 2018 UPRs were.  By 2013, the trend of Chinese investment was already well advanced globally, so the diff and diff is not able to capture this variation.  For future work, we recommend attempting to pull the 2009 UPR data and format it to include in the study.  We also would recommend including future  UPRs to see if this relationship holds, and if we can use the diff and diff more effectively with more observations to make a causal link.    
 
 For statistical graphs and regression tables please see the Appendix in the repo
-[Appendix.html](Master/Appendix.html)
+[Appendix](/Appendix.html)
 
 
