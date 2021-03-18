@@ -7,4 +7,4 @@
 ### in the UN Universal Periodic Review
 
 
-***Please see the write-up html file to help you find your way!*** 
+***Please see the [write-up.html](/write-up.html) file to help you find your way!*** 
