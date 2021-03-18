@@ -3,6 +3,8 @@ library(shiny)
 library(sf)
 library(spData)
 
+## link to the app: https://afortunato.shinyapps.io/frisbie_fortu_china_map/
+
 ## data on china 
 
 debt_stock <- read.csv("debt_stock_china.csv") %>% 
