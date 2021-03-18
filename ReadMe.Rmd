@@ -20,7 +20,7 @@ library(tm)
 library(rsconnect)
 ```
 
-
+This project is published here: https://rpubs.com/afortunato/740727
 
 ## Data
 
